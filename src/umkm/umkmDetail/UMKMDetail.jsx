@@ -207,6 +207,7 @@ export const UMKMDetail = () => {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
+                referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
           </div>
