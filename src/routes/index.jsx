@@ -6,6 +6,7 @@ import { StrukturPage } from "../struktur/StrukturPage";
 import { ProfilePage } from "../profil/ProfilePage";
 import { UMKMPage } from "../umkm/UMKMPage";
 import { UMKMDetailPage } from "../umkm/umkmDetail/UMKMDetailPage";
+import { Admin } from "../admin";
 
 export const router = createBrowserRouter([
     {
@@ -35,5 +36,9 @@ export const router = createBrowserRouter([
     {
       path: '/umkm/:id',
       element: <UMKMDetailPage />,
-    }
+    },
+    {
+      path: '/admin',
+      element: <Admin />,
+    },
   ]);

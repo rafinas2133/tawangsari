@@ -172,7 +172,7 @@ export const UMKMDetail = () => {
               />
             </div>
           </div>
-          <div className="bg-blue-900 p-4 sm:p-8 mb-8 rounded-lg shadow-lg flex flex-col w-full md:w-1/3 h-max mt-4 md:mt-0">
+          <div className="bg-blue-900 p-4 sm:p-8 m-6 rounded-lg shadow-lg flex flex-col w-full md:w-1/3 h-max mt-4 md:mt-0">
                     <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">
                         UMKM LAINNYA
                     </h2>
