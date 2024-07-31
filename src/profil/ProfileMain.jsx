@@ -2,6 +2,7 @@ import React from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import ProfilTawangsari from "../assets/profil.png";
 
 const galleryImages = [
   { src: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", alt: "Gallery Image 1" },
@@ -55,7 +56,7 @@ export const ProfileMain = () => {
       <div className="w-full h-max pb-10 px-4 py-20 md:px-52 bg-white">
         <div className="mb-8">
           <img 
-            src="https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+            src={ProfilTawangsari} 
             alt="Kelurahan Tawangsari" 
             className="w-full h-auto object-cover rounded-lg shadow-lg mb-4"
           />
