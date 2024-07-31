@@ -3,15 +3,17 @@ import LogoBlitar from '../assets/logoblitar.png'; // Adjust the path to your lo
 
 export const TawangsariFooter = () => {
   return (
-    <footer className="bg-card text-white py-10 px-20">
-      <div className="flex justify-between">
-        <div className="flex items-center">
-          <img src={LogoBlitar} alt="Logo Kelurahan Tawangsari" className="h-36 mr-4" />
-          <h1 className="text-3xl font-bold">KELURAHAN <br/>TAWANGSARI</h1>
+    <footer className="bg-card text-white py-10 px-5 md:px-10 lg:px-20">
+      <div className="flex flex-col md:flex-row justify-between">
+        <div className="flex items-center mb-6 md:mb-0">
+          <img src={LogoBlitar} alt="Logo Kelurahan Tawangsari" className="h-24 md:h-36 mr-4" />
+          <h1 className="text-2xl md:text-3xl font-bold">
+            KELURAHAN <br className="hidden md:block" />TAWANGSARI
+          </h1>
         </div>
-        <div className="flex-grow border-l-2 border-gray-300 ml-10 pl-10 h-48 flex justify-between items-center">
-          <div>
-            <h2 className="text-xl font-semibold mb-2">Navigasi</h2>
+        <div className="flex flex-col md:flex-row border-t-2 md:border-t-0 border-gray-300 pt-6 md:pt-0 md:border-l-2 md:border-gray-300 md:pl-10 md:h-48 md:items-center">
+          <div className="mb-6 md:mb-0 md:mr-10">
+            <h2 className="text-lg md:text-xl font-semibold mb-2">Navigasi</h2>
             <ul>
               <li>Profil</li>
               <li>Struktur</li>
@@ -19,8 +21,8 @@ export const TawangsariFooter = () => {
               <li>UMKM</li>
             </ul>
           </div>
-          <div>
-            <h2 className="text-xl font-semibold mb-2">Hubungi Kami</h2>
+          <div className="mb-6 md:mb-0 md:mr-10">
+            <h2 className="text-lg md:text-xl font-semibold mb-2">Hubungi Kami</h2>
             <ul>
               <li>Alamat: Jl. Penataran No.20</li>
               <li>Telp: +62 856-0457-1020</li>
@@ -29,7 +31,7 @@ export const TawangsariFooter = () => {
             </ul>
           </div>
           <div>
-            <h2 className="text-xl font-semibold mb-2">Sosial Media</h2>
+            <h2 className="text-lg md:text-xl font-semibold mb-2">Sosial Media</h2>
             <ul>
               <li>Tawangsari</li>
               <li>Tawangsari</li>
@@ -42,4 +44,3 @@ export const TawangsariFooter = () => {
     </footer>
   );
 };
-

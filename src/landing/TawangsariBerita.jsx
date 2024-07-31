@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import BeritaIsi from "../assets/beritaisi.png";
 
 const beritaData = [
     {
         id: 1,
         title: "Judul Berita 1",
         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vehicula urna ut lacus aliquet tincidunt.",
-        imageUrl: "https://images.unsplash.com/photo-1721978701302-6b8167d55752?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        imageUrl: BeritaIsi,
         link: "#",
         author: "Penulis 1",
         date: "2024-07-29"
@@ -15,7 +16,7 @@ const beritaData = [
         id: 2,
         title: "Judul Berita 2",
         description: "Aliquam tincidunt mauris eu risus varius, non sagittis purus feugiat. Sed vitae justo vitae lacus laoreet tristique.",
-        imageUrl: "https://images.unsplash.com/photo-1721626782208-ecfdc6625fc0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        imageUrl: BeritaIsi,
         link: "#",
         author: "Penulis 2",
         date: "2024-07-29"
@@ -24,7 +25,7 @@ const beritaData = [
         id: 3,
         title: "Judul Berita 3",
         description: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.",
-        imageUrl: "https://images.unsplash.com/photo-1721901950617-76587be1155f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        imageUrl: BeritaIsi,
         link: "#",
         author: "Penulis 3",
         date: "2024-07-29"

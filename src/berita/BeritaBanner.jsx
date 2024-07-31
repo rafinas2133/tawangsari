@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import LogoBlitar from "../assets/logoblitar.png";
+import Berita from "../assets/berita.png";
 
 export const BeritaBanner = () => {
     const images = [
-      "https://images.unsplash.com/photo-1722082839833-04f0094ea4ec?q=80&w=1895&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "https://images.unsplash.com/photo-1721564130772-c9ee561ab87b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "https://images.unsplash.com/photo-1721778775422-8cf9894040a9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        Berita,
+        Berita,
+        Berita
     ];
 
     const [currentIndex, setCurrentIndex] = useState(0);

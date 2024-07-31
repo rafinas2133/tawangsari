@@ -16,7 +16,7 @@ export const TawangsariNavbar = () => {
         <nav className="absolute w-screen z-50 flex bg-white h-[100px] items-center justify-between px-8 border-b border-gray-200">
             <div className="flex items-center space-x-4">
                 <img src={LogoBlitar} alt="Kelurahan Tawangsari" className="h-[65px]" />
-                <h1 className="text-2xl whitespace-nowrap">Kelurahan Tawangsari</h1>
+                <h1 className="text-sm md:text-2xl whitespace-nowrap">Kelurahan Tawangsari</h1>
             </div>
             <div className="md:hidden flex items-center">
                 <button onClick={toggleMenu} className="text-3xl">

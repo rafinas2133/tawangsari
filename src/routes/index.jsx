@@ -10,40 +10,40 @@ import { Admin } from "../admin/index";
 import { AdminPage } from "../admin/main";
 
 export const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <TawangsariPage />,
-    },
-    {
-      path: '/berita',
-      element: <BeritaPage />,
-    },
-    {
-      path: '/berita/:id',
-      element: <BeritaDetailPage />,
-    },
-    {
-      path: '/struktur',
-      element: <StrukturPage />,
-    },
-    {
-      path: '/profil',
-      element: <ProfilePage />,
-    },
-    {
-      path: '/umkm',
-      element: <UMKMPage />,
-    },
-    {
-      path: '/umkm/:id',
-      element: <UMKMDetailPage />,
-    },
-    {
-      path: '/admin',
-      element: <Admin />,
-    },
-    {
-      path: '/admin/main',
-      element: <AdminPage />,
-    },
-  ]);
+  {
+    path: '/',
+    element: <TawangsariPage />,
+  },
+  {
+    path: '/berita',
+    element: <BeritaPage />,
+  },
+  {
+    path: '/berita/:id',
+    element: <BeritaDetailPage />,
+  },
+  {
+    path: '/struktur',
+    element: <StrukturPage />,
+  },
+  {
+    path: '/profil',
+    element: <ProfilePage />,
+  },
+  {
+    path: '/umkm',
+    element: <UMKMPage />,
+  },
+  {
+    path: '/umkm/:id',
+    element: <UMKMDetailPage />,
+  },
+  {
+    path: '/admin',
+    element: <Admin />,
+  },
+  {
+    path: '/admin/main',
+    element: <AdminPage />,
+  },
+]);

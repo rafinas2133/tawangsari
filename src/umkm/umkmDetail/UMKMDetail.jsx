@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Pecel from '../../assets/pecel.png';
 
 const data = [
   {
@@ -104,8 +105,8 @@ export const UMKMDetail = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const images = [
-    "https://via.placeholder.com/600x400.png?text=Image+Placeholder+1",
-    "https://via.placeholder.com/600x400.png?text=Image+Placeholder+2"
+    Pecel,
+    Pecel
   ];
 
   const goToPrevious = () => {
@@ -128,20 +129,7 @@ export const UMKMDetail = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-4 px-20">
         <div className="bg-white p-4 rounded-lg flex flex-col w-full md:w-2/3 items-center">
-          <h2 className="text-2xl font-bold mb-4">Pentol Bakso Cak Endro</h2>
-          {/* <div className="relative">
-            <img
-              src="https://via.placeholder.com/600x400.png?text=Image+Placeholder"
-              alt="Pentol Bakso Cak Endro"
-              className="rounded-lg"
-            />
-            <button className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
-              {"<"}
-            </button>
-            <button className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
-              {">"}
-            </button>
-          </div> */}
+          <h2 className="text-2xl font-bold mb-4">{dataItem.title}</h2>
           <div className="relative">
             <div className="opacity-100">
               <img
@@ -217,7 +205,7 @@ export const UMKMDetail = () => {
           <div className="flex flex-col gap-4">
             <div className="bg-card p-4 rounded-3xl shadow-md flex flex-col text-white">
               <img
-                src="https://via.placeholder.com/600x400.png?text=Image+Placeholder"
+                src={Pecel}
                 alt="Sego Sambel Cu Mar"
                 className="rounded-lg h-44"
               />
@@ -228,7 +216,7 @@ export const UMKMDetail = () => {
             </div>
             <div className="bg-card p-4 rounded-3xl shadow-md flex flex-col text-white">
               <img
-                src="https://via.placeholder.com/600x400.png?text=Image+Placeholder"
+                src={Pecel}
                 alt="Sego Sambel Cu Mar"
                 className="rounded-lg h-44"
               />
@@ -239,7 +227,7 @@ export const UMKMDetail = () => {
             </div>
             <div className="bg-card p-4 rounded-3xl shadow-md flex flex-col text-white">
               <img
-                src="https://via.placeholder.com/600x400.png?text=Image+Placeholder"
+                src={Pecel}
                 alt="Sego Sambel Cu Mar"
                 className="rounded-lg h-44"
               />
