@@ -1,25 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import useCarousels from '../hooks/useCarousels';
 import Modal from '../components/Modal';
 
-const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => {
-  const [newItem, setNewItem] = useState({
-    title: '',
-    content: '',
-    image: '',
-    timestamp: '',
-    uploader: ''
+const CarouselsForm = () => {
+  const [carousel, setCarousel] = useState({
+    images: []
   });
-  const [editItem, setEditItem] = useState(null);
+  const { carousels, addCarousel, updateCarousel, deleteCarousel, loading, error, fetchCarousels } = useCarousels();
+
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
+  const [editItem, setEditItem] = useState(null);
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setNewItem({
-      ...newItem,
-      [name]: files ? files[0] : value
+  useEffect(() => {
+    fetchCarousels(); // Ensure fetchCarousels is called
+  }, [fetchCarousels]);
+
+  const handleImageChange = (e) => {
+    setCarousel({
+      ...carousel,
+      images: [...e.target.files]
     });
   };
 
@@ -27,20 +29,16 @@ const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => 
     e.preventDefault();
     try {
       if (editItem) {
-        await updateNews(editItem.uuid, newItem);
+        await updateCarousel(editItem.uuid, carousel);
         setModalTitle('Success');
-        setModalMessage('News updated successfully');
+        setModalMessage('Carousel updated successfully');
       } else {
-        await addNews(newItem);
+        await addCarousel(carousel);
         setModalTitle('Success');
-        setModalMessage('News added successfully');
+        setModalMessage('Carousel added successfully');
       }
-      setNewItem({
-        title: '',
-        content: '',
-        image: '',
-        timestamp: '',
-        uploader: ''
+      setCarousel({
+        images: []
       });
       setEditItem(null);
     } catch (err) {
@@ -53,13 +51,7 @@ const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => 
 
   const handleEdit = (item) => {
     setEditItem(item);
-    setNewItem({
-      title: item.title || '',
-      content: item.content || '',
-      image: item.image || '',
-      timestamp: item.timestamp || '',
-      uploader: item.uploader || ''
-    });
+    setCarousel(item);
     setModalVisible(false);
   };
 
@@ -70,9 +62,9 @@ const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => 
 
   const confirmDelete = async () => {
     try {
-      await deleteNews(editItem.uuid);
+      await deleteCarousel(editItem.uuid);
       setModalTitle('Success');
-      setModalMessage('News deleted successfully');
+      setModalMessage('Carousel deleted successfully');
     } catch (err) {
       setModalTitle('Error');
       setModalMessage(err.response?.data?.message || 'An error occurred');
@@ -91,52 +83,10 @@ const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => 
   return (
     <div>
       <form onSubmit={handleSubmit} className="bg-white p-4 shadow-md">
-        <h2 className="text-2xl mb-4">{editItem ? 'Edit News' : 'Add News'}</h2>
+        <h2 className="text-2xl mb-4">{editItem ? 'Edit Carousel' : 'Add Carousel'}</h2>
         <div className="mb-4">
-          <label className="block mb-2">Title</label>
-          <input
-            name="title"
-            value={newItem.title}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Content</label>
-          <textarea
-            name="content"
-            value={newItem.content}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          ></textarea>
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Image Path</label>
-          <input
-            name="image"
-            value={newItem.image}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Timestamp</label>
-          <input
-            name="timestamp"
-            type="datetime-local"
-            value={newItem.timestamp}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Uploader</label>
-          <input
-            name="uploader"
-            value={newItem.uploader}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
+          <label className="block mb-2">Images</label>
+          <input name="images" type="file" multiple onChange={handleImageChange} className="w-full px-3 py-2 border rounded" />
         </div>
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
           {editItem ? 'Update' : 'Submit'}
@@ -145,20 +95,22 @@ const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => 
       </form>
 
       <div className="mt-8">
-        <h2 className="text-2xl mb-4">News List</h2>
+        <h2 className="text-2xl mb-4">Carousel List</h2>
         <table className="min-w-full bg-white">
           <thead>
             <tr>
-              <th className="py-2">Title</th>
-              <th className="py-2">Content</th>
+              <th className="py-2">Images</th>
               <th className="py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {news.map((item) => (
+            {carousels && carousels.map((item) => (
               <tr key={item.uuid}>
-                <td className="border px-4 py-2">{item.title}</td>
-                <td className="border px-4 py-2">{item.content}</td>
+                <td className="border px-4 py-2">
+                  {item.images && item.images.map((img, index) => (
+                    <img key={index} src={`https://tawangsari.com/${img}`} alt="Carousel" className="w-16 h-16 inline-block mr-2" />
+                  ))}
+                </td>
                 <td className="border px-4 py-2">
                   <button
                     onClick={() => handleEdit(item)}
@@ -205,4 +157,4 @@ const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => 
   );
 };
 
-export default NewsForm;
+export default CarouselsForm;

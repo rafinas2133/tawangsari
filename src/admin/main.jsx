@@ -9,7 +9,6 @@ export const AdminPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log('Token in AdminPage useEffect:', token);
     if (!token) {
       navigate('/admin');
     }
