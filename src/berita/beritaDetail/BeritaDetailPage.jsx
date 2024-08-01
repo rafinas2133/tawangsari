@@ -5,7 +5,7 @@ import { BeritaLatest } from "./BeritaLatest";
 
 export const BeritaDetailPage = () => {
     return (
-        <div className="w-screen overflow-x-hidden bg-gray-300 h-screen max-w-screen">
+        <div className="w-screen overflow-x-hidden bg-white h-screen max-w-screen">
             <TawangsariNavbar />
             <BeritaDetail />
             <BeritaLatest />

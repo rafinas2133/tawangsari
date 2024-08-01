@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import LogoBlitar from "../assets/logoblitar.png";
+import { Link } from 'react-router-dom';
 
 export const TawangsariNavbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -13,10 +14,10 @@ export const TawangsariNavbar = () => {
         isActive ? "block py-2 px-4 underline underline-offset-[15px] decoration-mist" : "block py-2 px-4 hover:underline hover:underline-offset-[15px] hover:decoration-mist";
 
     return (
-        <nav className="absolute w-screen z-50 flex bg-white h-[100px] items-center justify-between px-8 border-b border-gray-200">
+        <nav className="absolute w-screen z-50 flex bg-white h-[100px] items-center justify-between px-4 md:px-8 border-b border-gray-200">
             <div className="flex items-center space-x-4">
-                <img src={LogoBlitar} alt="Kelurahan Tawangsari" className="h-[65px]" />
-                <h1 className="text-sm md:text-2xl whitespace-nowrap">Kelurahan Tawangsari</h1>
+                <img src={LogoBlitar} alt="Kelurahan Tawangsari" className="h-[30px] md:h-[65px]" />
+                <h1 className="text-l md:text-2xl whitespace-nowrap">Kelurahan Tawangsari</h1>
             </div>
             <div className="md:hidden flex items-center">
                 <button onClick={toggleMenu} className="text-3xl">

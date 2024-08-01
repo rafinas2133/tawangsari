@@ -23,9 +23,9 @@ export const BeritaBanner = () => {
     }, [images.length]);
 
     return (
-        <div className="relative w-full h-screen lg:h-[534px] lg:pb-52 pb-20 overflow-hidden">
+        <div className="relative bg-white w-full h-max mt-20 md:h-full lg:h-[534px] lg:pb-52 pb-20 overflow-hidden">
             <div className={`transition-opacity duration-1000 ${fade ? 'opacity-100' : 'opacity-40'}`}>
-                <img src={images[currentIndex]} alt="Carousel" className="w-full h-full object-cover" />
+                <img src={images[currentIndex]} alt="Carousel" className="w-full h-full scale-[2.2] md:scale-100 object-cover" />
             </div>
             <div className="absolute bg-black bg-opacity-50 inset-0 flex flex-col justify-center items-center text-white p-4 md:p-8">
                 <h2 className="text-2xl md:text-5xl font-bold text-center md:mt-20">BERITA</h2>

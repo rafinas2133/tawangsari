@@ -40,9 +40,9 @@ export const TawangsariBanner = () => {
     };
 
     return (
-        <div className="relative w-full h-screen lg:h-full lg:pb-52 pb-20 overflow-hidden">
-            <div className={`transition-opacity duration-1000 ${fade ? 'opacity-100' : 'opacity-40'}`}>
-                <img src={images[currentIndex]} alt="Carousel" className="w-full h-full object-cover" />
+        <div className="relative w-full mt-20 h-max md:h-full lg:h-full lg:pb-52 pb-20 overflow-hidden">
+            <div className={`transition-opacity duration-1000 ${fade ? 'opacity-100' : 'opacity-0'}`}>
+                <img src={images[currentIndex]} alt="Carousel" className="w-full h-full scale-[2] md:scale-100 object-cover" />
             </div>
             <div className="absolute bg-black bg-opacity-50 inset-0 flex flex-col justify-center items-center text-white p-4 md:p-8">
                 <img src={LogoBlitar} alt="Kelurahan Tawangsari" className="h-20 md:h-36 mb-4" />

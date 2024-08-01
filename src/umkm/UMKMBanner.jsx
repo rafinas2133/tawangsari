@@ -23,7 +23,7 @@ export const UMKMBanner = () => {
     }, [images.length]);
 
     return (
-        <div className="relative bg-white w-full h-screen mt-16 sm:mt-20 overflow-hidden">
+        <div className="relative bg-white w-full h-max md-full mt-20 sm:mt-20 overflow-hidden">
         <div className={`transition-opacity duration-1000 ${fade ? 'opacity-100' : 'opacity-40'}`}>
             <img src={images[currentIndex]} alt="Carousel" className="w-full h-full object-cover" />
         </div>
