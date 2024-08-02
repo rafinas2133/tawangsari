@@ -1,36 +1,27 @@
-import { useState, useEffect } from 'react';
 import Berita from "../assets/berita.png";
+import {Helmet} from "react-helmet-async";
+// eslint-disable-next-line no-unused-vars
+import React from "react";
 
 export const BeritaBanner = () => {
-    const images = [
-        Berita,
-        Berita,
-        Berita
-    ];
-
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [fade, setFade] = useState(true);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setFade(false);
-            setTimeout(() => {
-                setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-                setFade(true);
-            }, 1000); // Fading duration
-        }, 5000); // Change image every 5 seconds
-        return () => clearInterval(interval);
-    }, [images.length]);
-
-    return (
-        <div className="relative bg-white w-full h-max mt-20 md:h-full lg:h-[534px] lg:pb-52 pb-20 overflow-hidden">
-            <div className={`transition-opacity duration-1000 ${fade ? 'opacity-100' : 'opacity-40'}`}>
-                <img src={images[currentIndex]} alt="Carousel" className="w-full h-full scale-[2.2] md:scale-100 object-cover" />
-            </div>
-            <div className="absolute bg-black bg-opacity-50 inset-0 flex flex-col justify-center items-center text-white p-4 md:p-8">
+    return (<>
+        <Helmet>
+            <meta name="description"
+                  content="Tempat Keseluruhan Berita Kelurahan Tawangsari, Kecamatan Garum, Kabupaten Blitar"/>
+            <meta name="keywords" content="berita, news, latest, terbaru, tawangsari, kelurahan"/>
+            <meta property="og:title" content="Berita Kelurahan Tawangsari"/>
+            <meta property="og:description"
+                  content="Tempat Keseluruhan Berita Kelurahan Tawangsari, Kecamatan Garum, Kabupaten Blitar"/>
+            <meta property="og:url" content={`https://tawangsari.com/berita`}/>
+        </Helmet>
+        <div className="relative bg-white w-full min-h-[50vh] md:h-[40vw] lg:h-[50vw] mt-20 pb-20 overflow-hidden"
+             style={{backgroundImage: `url(${Berita})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+            <div
+                className="absolute bg-black bg-opacity-50 inset-0 flex flex-col justify-center items-center text-white p-4 md:p-8">
                 <h2 className="text-2xl md:text-5xl font-bold text-center md:mt-20">BERITA</h2>
-                <p className="text-lg md:text-2xl text-center">Informasi Terkini dan Faktual mengenai Kegiatan, <br></br>Program, dan Peristiwa yang terjadi di Kelurahan Tawangsari</p>
+                <p className="text-lg md:text-2xl text-center">Informasi Terkini dan Faktual mengenai
+                    Kegiatan, <br></br>Program, dan Peristiwa yang terjadi di Kelurahan Tawangsari</p>
             </div>
         </div>
-    );
+    </>);
 }

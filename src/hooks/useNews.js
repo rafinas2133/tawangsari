@@ -56,7 +56,7 @@ const useNews = () => {
         },
       });
       setNews((prevNews) =>
-        prevNews.map((item) => (item.uuid === uuid ? response.data.data : item))
+        prevNews.map((item) => (item["uuid"] === uuid ? response.data.data : item))
       );
       setLoading(false);
     } catch (err) {
@@ -74,7 +74,7 @@ const useNews = () => {
           'Authorization': `Bearer ${AUTH_TOKEN}`,
         },
       });
-      setNews((prevNews) => prevNews.filter((item) => item.uuid !== uuid));
+      setNews((prevNews) => prevNews.filter((item) => item["uuid"] !== uuid));
       setLoading(false);
     } catch (err) {
       setError(err);
@@ -84,7 +84,7 @@ const useNews = () => {
   };
 
   useEffect(() => {
-    fetchNews();
+    fetchNews().then();
   }, [fetchNews]);
 
   return { news, loading, error, addNews, updateNews, deleteNews, fetchNews };
