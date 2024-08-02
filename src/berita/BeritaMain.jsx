@@ -12,7 +12,9 @@ export const BeritaMain = () => {
         const getNews = async () => {
             try {
                 setLoading(true);
-                setNewsItem(await fetchNewsData());
+                const data = await fetchNewsData();
+                const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                setNewsItem(sortedData);
                 setLoading(false);
             } catch (err) {
                 setError(err.message);
