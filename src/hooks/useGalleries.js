@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const API_URL = 'https://tawangsari.com/api/galleries';
@@ -9,7 +9,7 @@ const useGalleries = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchGalleries = async () => {
+  const fetchGalleries = useCallback( async () => {
     setLoading(true);
     try {
       const response = await axios.get(API_URL);
@@ -19,7 +19,7 @@ const useGalleries = () => {
       setError(err);
       setLoading(false);
     }
-  };
+  },[]);
 
   const addGallery = async (newItem) => {
     setLoading(true);
@@ -80,11 +80,7 @@ const useGalleries = () => {
     }
   };
 
-  useEffect(() => {
-    fetchGalleries();
-  }, []);
-
-  return { galleries, loading, error, addGallery, updateGallery, deleteGallery };
+  return { galleries, loading, error, fetchGalleries, addGallery, updateGallery, deleteGallery };
 };
 
 export default useGalleries;

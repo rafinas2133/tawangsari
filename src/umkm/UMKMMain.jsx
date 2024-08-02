@@ -1,101 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from "react-slick";
-
-const data = [
-  {
-    id: 1,
-    title: "Pentol Bakso Cak Endro",
-    category: "Kuliner",
-    description: "Pedagang Bakso",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 2,
-    title: "Sego Sambel Cu Mar",
-    category: "Kuliner",
-    description: "Warung Makan",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 3,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 4,
-    title: "Pentol Bakso Cak Endro",
-    category: "Kuliner",
-    description: "Pedagang Bakso",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 5,
-    title: "Sego Sambel Cu Mar",
-    category: "Kuliner",
-    description: "Warung Makan",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 6,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 7,
-    title: "Sego Sambel Cu Mar",
-    category: "Kuliner",
-    description: "Warung Makan",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 8,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 9,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 10,
-    title: "Sego Sambel Cu Mar",
-    category: "Kuliner",
-    description: "Warung Makan",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 11,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 12,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 13,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  // ... more data
-];
+import useUMKM from '../hooks/useUMKM';
 
 export const UMKMMain = () => {
   const [selectedCategory, setSelectedCategory] = useState('Semua');
@@ -103,9 +9,15 @@ export const UMKMMain = () => {
   const categories = ['Semua', 'Kuliner', 'Salon & Kecantikan', 'Jasa & Reparasi', 'Lainnya'];
   const itemsPerPage = 6;
 
+  const { umkm, loading, error, fetchUMKM } = useUMKM();
+
+  useEffect(() => {
+    fetchUMKM();
+  }, [fetchUMKM]);
+
   const filteredData = selectedCategory === 'Semua'
-    ? data
-    : data.filter(item => item.category === selectedCategory);
+    ? umkm
+    : umkm.filter(item => item.category === selectedCategory);
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -168,17 +80,17 @@ export const UMKMMain = () => {
       </div>
       <Slider {...settings} key={selectedCategory}>
         {pageData.map(item => (
-          <div key={item.id} className="p-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+          <div key={item.uuid} className="p-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
             <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-300">
               <img
-                src={item.imageUrl}
+                src={`https://tawangsari.com/api/${item.image_path}`}
                 alt={item.title}
                 className="w-full h-48 sm:h-48 object-cover"
               />
               <div className="p-4">
                 <h2 className="text-lg font-bold mb-2">{item.title}</h2>
-                <p className="text-sm text-gray-600 mb-4">{item.description}</p>
-                <Link to={`/umkm/${item.id}`}>
+                <p className="text-sm text-gray-600 mb-4">{item.description.split(' ').slice(0, 5).join(' ')}...</p>
+                <Link to={`/umkm/${item.uuid}`}>
                   <button className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm sm:text-base">
                     Selengkapnya
                   </button>

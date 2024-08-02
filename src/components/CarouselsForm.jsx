@@ -1,11 +1,12 @@
+// components/CarouselsForm.js
 import React, { useState, useEffect } from 'react';
 import useCarousels from '../hooks/useCarousels';
-import Modal from '../components/Modal';
+import Modal from './Modal';
+import Input from './Input';
+import Form from './Form';
 
 const CarouselsForm = () => {
-  const [carousel, setCarousel] = useState({
-    images: []
-  });
+  const [carousel, setCarousel] = useState({ images: [] });
   const { carousels, addCarousel, updateCarousel, deleteCarousel, loading, error, fetchCarousels } = useCarousels();
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -15,14 +16,11 @@ const CarouselsForm = () => {
   const [editItem, setEditItem] = useState(null);
 
   useEffect(() => {
-    fetchCarousels(); // Ensure fetchCarousels is called
+    fetchCarousels();
   }, [fetchCarousels]);
 
   const handleImageChange = (e) => {
-    setCarousel({
-      ...carousel,
-      images: [...e.target.files]
-    });
+    setCarousel({ ...carousel, images: [...e.target.files] });
   };
 
   const handleSubmit = async (e) => {
@@ -37,9 +35,7 @@ const CarouselsForm = () => {
         setModalTitle('Success');
         setModalMessage('Carousel added successfully');
       }
-      setCarousel({
-        images: []
-      });
+      setCarousel({ images: [] });
       setEditItem(null);
     } catch (err) {
       setModalTitle('Error');
@@ -82,17 +78,10 @@ const CarouselsForm = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="bg-white p-4 shadow-md">
+      <Form onSubmit={handleSubmit} loading={loading}>
         <h2 className="text-2xl mb-4">{editItem ? 'Edit Carousel' : 'Add Carousel'}</h2>
-        <div className="mb-4">
-          <label className="block mb-2">Images</label>
-          <input name="images" type="file" multiple onChange={handleImageChange} className="w-full px-3 py-2 border rounded" />
-        </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-          {editItem ? 'Update' : 'Submit'}
-        </button>
-        {loading && <p>Loading...</p>}
-      </form>
+        <Input label="Images" name="images" type="file" multiple onChange={handleImageChange} />
+      </Form>
 
       <div className="mt-8">
         <h2 className="text-2xl mb-4">Carousel List</h2>

@@ -1,24 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import useNews from '../hooks/useNews';
 import Modal from '../components/Modal';
+import Input from '../components/Input';
+import Form from '../components/Form';
 
-const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => {
-  const [newItem, setNewItem] = useState({
+const NewsForm = () => {
+  const [newsItem, setNewsItem] = useState({
     title: '',
     content: '',
-    image: '',
+    image: null,
     timestamp: '',
     uploader: ''
   });
-  const [editItem, setEditItem] = useState(null);
+  const { news, addNews, updateNews, deleteNews, loading, error, fetchNews } = useNews();
+
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
+  const [editItem, setEditItem] = useState(null);
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setNewItem({
-      ...newItem,
+    setNewsItem({
+      ...newsItem,
       [name]: files ? files[0] : value
     });
   };
@@ -27,18 +36,18 @@ const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => 
     e.preventDefault();
     try {
       if (editItem) {
-        await updateNews(editItem.uuid, newItem);
+        await updateNews(editItem.uuid, newsItem);
         setModalTitle('Success');
         setModalMessage('News updated successfully');
       } else {
-        await addNews(newItem);
+        await addNews(newsItem);
         setModalTitle('Success');
         setModalMessage('News added successfully');
       }
-      setNewItem({
+      setNewsItem({
         title: '',
         content: '',
-        image: '',
+        image: null,
         timestamp: '',
         uploader: ''
       });
@@ -53,14 +62,16 @@ const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => 
 
   const handleEdit = (item) => {
     setEditItem(item);
-    setNewItem({
+    setNewsItem({
       title: item.title || '',
       content: item.content || '',
-      image: item.image || '',
+      image: item.image || null,
       timestamp: item.timestamp || '',
       uploader: item.uploader || ''
     });
-    setModalVisible(false);
+    setModalTitle('Edit News');
+    setModalMessage('Edit the news details below');
+    setModalVisible(true);
   };
 
   const handleDelete = async (item) => {
@@ -90,59 +101,14 @@ const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => 
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="bg-white p-4 shadow-md">
+      <Form onSubmit={handleSubmit} loading={loading}>
         <h2 className="text-2xl mb-4">{editItem ? 'Edit News' : 'Add News'}</h2>
-        <div className="mb-4">
-          <label className="block mb-2">Title</label>
-          <input
-            name="title"
-            value={newItem.title}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Content</label>
-          <textarea
-            name="content"
-            value={newItem.content}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          ></textarea>
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Image Path</label>
-          <input
-            name="image"
-            value={newItem.image}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Timestamp</label>
-          <input
-            name="timestamp"
-            type="datetime-local"
-            value={newItem.timestamp}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Uploader</label>
-          <input
-            name="uploader"
-            value={newItem.uploader}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-          {editItem ? 'Update' : 'Submit'}
-        </button>
-        {loading && <p>Loading...</p>}
-      </form>
+        <Input label="Title" name="title" value={newsItem.title} onChange={handleChange} />
+        <Input label="Content" name="content" value={newsItem.content} onChange={handleChange} type="textarea" />
+        <Input label="Image" name="image" type="file" onChange={handleChange} />
+        <Input label="Timestamp" name="timestamp" value={newsItem.timestamp} onChange={handleChange} type="datetime-local" />
+        <Input label="Uploader" name="uploader" value={newsItem.uploader} onChange={handleChange} />
+      </Form>
 
       <div className="mt-8">
         <h2 className="text-2xl mb-4">News List</h2>
@@ -155,26 +121,32 @@ const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => 
             </tr>
           </thead>
           <tbody>
-            {news.map((item) => (
-              <tr key={item.uuid}>
-                <td className="border px-4 py-2">{item.title}</td>
-                <td className="border px-4 py-2">{item.content}</td>
-                <td className="border px-4 py-2">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(item)}
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                  >
-                    Delete
-                  </button>
-                </td>
+            {news && news.length > 0 ? (
+              news.map((item) => (
+                <tr key={item.uuid}>
+                  <td className="border px-4 py-2">{item.title}</td>
+                  <td className="border px-4 py-2">{item.content}</td>
+                  <td className="border px-4 py-2">
+                    <button
+                      onClick={() => handleEdit(item)}
+                      className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item)}
+                      className="bg-red-500 text-white px-4 py-2 rounded"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3" className="border px-4 py-2 text-center">No news available</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
@@ -184,7 +156,20 @@ const NewsForm = ({ news, addNews, updateNews, deleteNews, loading, error }) => 
         onClose={handleCloseModal}
         title={modalTitle}
         message={modalMessage}
-      />
+      >
+        {editItem && (
+          <Form onSubmit={handleSubmit} loading={loading}>
+            <Input label="Title" name="title" value={newsItem.title} onChange={handleChange} />
+            <Input label="Content" name="content" value={newsItem.content} onChange={handleChange} type="textarea" />
+            <Input label="Image" name="image" type="file" onChange={handleChange} />
+            <Input label="Timestamp" name="timestamp" value={newsItem.timestamp} onChange={handleChange} type="datetime-local" />
+            <Input label="Uploader" name="uploader" value={newsItem.uploader} onChange={handleChange} />
+            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+              Update
+            </button>
+          </Form>
+        )}
+      </Modal>
 
       {confirmVisible && (
         <Modal

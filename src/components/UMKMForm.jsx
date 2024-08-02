@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import Modal from '../components/Modal';
+import React, { useState, useEffect } from 'react';
+import useUMKM from '../hooks/useUMKM';
+import Modal from './Modal';
+import Input from './Input';
+import Form from './Form';
 
-const UMKMForm = ({ umkm, addUMKM, updateUMKM, deleteUMKM, loading, error }) => {
-  const [newItem, setNewItem] = useState({
+const UMKMForm = () => {
+  const [umkmItem, setUMKMItem] = useState({
     title: '',
     description: '',
     owner: '',
@@ -11,16 +14,22 @@ const UMKMForm = ({ umkm, addUMKM, updateUMKM, deleteUMKM, loading, error }) => 
     image: null,
     google_map_link: ''
   });
-  const [editItem, setEditItem] = useState(null);
+  const { addUMKM, updateUMKM, deleteUMKM, loading, error, fetchUMKM, umkmList = [] } = useUMKM();
+
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
+  const [editItem, setEditItem] = useState(null);
+
+  useEffect(() => {
+    fetchUMKM();
+  }, [fetchUMKM]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setNewItem({
-      ...newItem,
+    setUMKMItem({
+      ...umkmItem,
       [name]: files ? files[0] : value
     });
   };
@@ -29,15 +38,15 @@ const UMKMForm = ({ umkm, addUMKM, updateUMKM, deleteUMKM, loading, error }) => 
     e.preventDefault();
     try {
       if (editItem) {
-        await updateUMKM(editItem.uuid, newItem);
+        await updateUMKM(editItem.uuid, umkmItem);
         setModalTitle('Success');
         setModalMessage('UMKM updated successfully');
       } else {
-        await addUMKM(newItem);
+        await addUMKM(umkmItem);
         setModalTitle('Success');
         setModalMessage('UMKM added successfully');
       }
-      setNewItem({
+      setUMKMItem({
         title: '',
         description: '',
         owner: '',
@@ -57,8 +66,18 @@ const UMKMForm = ({ umkm, addUMKM, updateUMKM, deleteUMKM, loading, error }) => 
 
   const handleEdit = (item) => {
     setEditItem(item);
-    setNewItem(item);
-    setModalVisible(false);
+    setUMKMItem({
+      title: item.title || '',
+      description: item.description || '',
+      owner: item.owner || '',
+      contact_person: item.contact_person || '',
+      address: item.address || '',
+      image: null,
+      google_map_link: item.google_map_link || ''
+    });
+    setModalTitle('Edit UMKM');
+    setModalMessage('Edit the UMKM details below');
+    setModalVisible(true);
   };
 
   const handleDelete = async (item) => {
@@ -88,67 +107,15 @@ const UMKMForm = ({ umkm, addUMKM, updateUMKM, deleteUMKM, loading, error }) => 
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="bg-white p-4 shadow-md">
+      <Form onSubmit={handleSubmit} loading={loading}>
         <h2 className="text-2xl mb-4">{editItem ? 'Edit UMKM' : 'Add UMKM'}</h2>
-        <div className="mb-4">
-          <label className="block mb-2">Title</label>
-          <input
-            name="title"
-            value={newItem.title}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Description</label>
-          <textarea
-            name="description"
-            value={newItem.description}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          ></textarea>
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Owner</label>
-          <input
-            name="owner"
-            value={newItem.owner}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Contact Person</label>
-          <input
-            name="contact_person"
-            value={newItem.contact_person}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Google Maps Link</label>
-          <input
-            name="google_map_link"
-            value={newItem.google_map_link}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Image</label>
-          <input
-            name="image"
-            type="file"
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-          {editItem ? 'Update' : 'Submit'}
-        </button>
-        {loading && <p>Loading...</p>}
-      </form>
+        <Input label="Title" name="title" value={umkmItem.title} onChange={handleChange} />
+        <Input label="Description" name="description" value={umkmItem.description} onChange={handleChange} type="textarea" />
+        <Input label="Owner" name="owner" value={umkmItem.owner} onChange={handleChange} />
+        <Input label="Contact Person" name="contact_person" value={umkmItem.contact_person} onChange={handleChange} />
+        <Input label="Google Maps Link" name="google_map_link" value={umkmItem.google_map_link} onChange={handleChange} />
+        <Input label="Image" name="image" type="file" onChange={handleChange} />
+      </Form>
 
       <div className="mt-8">
         <h2 className="text-2xl mb-4">UMKM List</h2>
@@ -161,7 +128,7 @@ const UMKMForm = ({ umkm, addUMKM, updateUMKM, deleteUMKM, loading, error }) => 
             </tr>
           </thead>
           <tbody>
-            {umkm.map((item) => (
+            {umkmList.map((item) => (
               <tr key={item.uuid}>
                 <td className="border px-4 py-2">{item.title}</td>
                 <td className="border px-4 py-2">{item.description}</td>
@@ -190,7 +157,21 @@ const UMKMForm = ({ umkm, addUMKM, updateUMKM, deleteUMKM, loading, error }) => 
         onClose={handleCloseModal}
         title={modalTitle}
         message={modalMessage}
-      />
+      >
+        {editItem && (
+          <Form onSubmit={handleSubmit} loading={loading}>
+            <Input label="Title" name="title" value={umkmItem.title} onChange={handleChange} />
+            <Input label="Description" name="description" value={umkmItem.description} onChange={handleChange} type="textarea" />
+            <Input label="Owner" name="owner" value={umkmItem.owner} onChange={handleChange} />
+            <Input label="Contact Person" name="contact_person" value={umkmItem.contact_person} onChange={handleChange} />
+            <Input label="Google Maps Link" name="google_map_link" value={umkmItem.google_map_link} onChange={handleChange} />
+            <Input label="Image" name="image" type="file" onChange={handleChange} />
+            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+              Update
+            </button>
+          </Form>
+        )}
+      </Modal>
 
       {confirmVisible && (
         <Modal

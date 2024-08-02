@@ -1,126 +1,26 @@
-import React from 'react';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Pecel from '../../assets/pecel.png';
-
-const data = [
-  {
-    id: 1,
-    title: "Pentol Bakso Cak Endro",
-    category: "Kuliner",
-    description: "Pedagang Bakso",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 2,
-    title: "Sego Sambel Cu Mar",
-    category: "Kuliner",
-    description: "Warung Makan",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 3,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 4,
-    title: "Pentol Bakso Cak Endro",
-    category: "Kuliner",
-    description: "Pedagang Bakso",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 5,
-    title: "Sego Sambel Cu Mar",
-    category: "Kuliner",
-    description: "Warung Makan",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 6,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 7,
-    title: "Sego Sambel Cu Mar",
-    category: "Kuliner",
-    description: "Warung Makan",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 8,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 9,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 10,
-    title: "Sego Sambel Cu Mar",
-    category: "Kuliner",
-    description: "Warung Makan",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 11,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 12,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: 13,
-    title: "Warung Lalapan Prasmanan",
-    category: "Kuliner",
-    description: "Catering",
-    imageUrl: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  // ... more data
-];
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import useUMKM from '../../hooks/useUMKM';
 
 export const UMKMDetail = () => {
-  const { id } = useParams();
-  const dataItem = data.find(item => item.id === parseInt(id));
+  const { uuid } = useParams();
+  const { umkm, loading, error, fetchUMKM } = useUMKM();
+  const [umkmItem, setUMKMItem] = useState(null);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    fetchUMKM();
+  }, [fetchUMKM]);
 
-  const images = [
-    Pecel,
-    Pecel
-  ];
+  useEffect(() => {
+    if (umkm.length > 0) {
+      const item = umkm.find((item) => item.uuid === uuid);
+      setUMKMItem(item);
+    }
+  }, [umkm, uuid]);
 
-  const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
-  };
-
-
-  if (!dataItem) {
-    return <div>Data tidak ditemukan</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading UMKM</div>;
+  if (!umkmItem) return <div>Data tidak ditemukan</div>;
 
   return (
     <div>
@@ -129,117 +29,57 @@ export const UMKMDetail = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-4 px-20">
         <div className="bg-white p-4 rounded-lg flex flex-col w-full md:w-2/3 items-center">
-          <h2 className="text-2xl font-bold mb-4">{dataItem.title}</h2>
-          <div className="relative">
-            <div className="opacity-100">
-              <img
-                src={images[currentIndex]}
-                alt={`Slide ${currentIndex + 1}`}
-                className="rounded-lg w-full h-full object-cover"
-              />
-            </div>
-            <button
-              onClick={goToPrevious}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2"
-            >
-              &#10094; {/* Left arrow */}
-            </button>
-            <button
-              onClick={goToNext}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2"
-            >
-              &#10095; {/* Right arrow */}
-            </button>
+          <h2 className="text-2xl font-bold mb-4">{umkmItem.title}</h2>
+          <img
+            src={`https://tawangsari.com/api/${umkmItem.image_path}`}
+            alt={umkmItem.title}
+            className="rounded-lg w-full h-96 object-cover mb-4"
+          />
+          <p className="text-lg text-justify mb-4">{umkmItem.description}</p>
+          <div className="flex items-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 448 512"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/></svg>
+            <span className="text-gray-600 mr-4">{umkmItem.owner}</span>
+            <span className="text-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48">
+                  <path fill="#fff" d="M4.868,43.303l2.694-9.835C5.9,30.59,5.026,27.324,5.027,23.979C5.032,13.514,13.548,5,24.014,5c5.079,0.002,9.845,1.979,13.43,5.566c3.584,3.588,5.558,8.356,5.556,13.428c-0.004,10.465-8.522,18.98-18.986,18.98c-0.001,0,0,0,0,0h-0.008c-3.177-0.001-6.3-0.798-9.073-2.311L4.868,43.303z"></path><path fill="#fff" d="M4.868,43.803c-0.132,0-0.26-0.052-0.355-0.148c-0.125-0.127-0.174-0.312-0.127-0.483l2.639-9.636c-1.636-2.906-2.499-6.206-2.497-9.556C4.532,13.238,13.273,4.5,24.014,4.5c5.21,0.002,10.105,2.031,13.784,5.713c3.679,3.683,5.704,8.577,5.702,13.781c-0.004,10.741-8.746,19.48-19.486,19.48c-3.189-0.001-6.344-0.788-9.144-2.277l-9.875,2.589C4.953,43.798,4.911,43.803,4.868,43.803z"></path><path fill="#cfd8dc" d="M24.014,5c5.079,0.002,9.845,1.979,13.43,5.566c3.584,3.588,5.558,8.356,5.556,13.428c-0.004,10.465-8.522,18.98-18.986,18.98h-0.008c-3.177-0.001-6.3-0.798-9.073-2.311L4.868,43.303l2.694-9.835C5.9,30.59,5.026,27.324,5.027,23.979C5.032,13.514,13.548,5,24.014,5 M24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974 M24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974 M24.014,4C24.014,4,24.014,4,24.014,4C12.998,4,4.032,12.962,4.027,23.979c-0.001,3.367,0.849,6.685,2.461,9.622l-2.585,9.439c-0.094,0.345,0.002,0.713,0.254,0.967c0.19,0.192,0.447,0.297,0.711,0.297c0.085,0,0.17-0.011,0.254-0.033l9.687-2.54c2.828,1.468,5.998,2.243,9.197,2.244c11.024,0,19.99-8.963,19.995-19.98c0.002-5.339-2.075-10.359-5.848-14.135C34.378,6.083,29.357,4.002,24.014,4L24.014,4z"></path><path fill="#40c351" d="M35.176,12.832c-2.98-2.982-6.941-4.625-11.157-4.626c-8.704,0-15.783,7.076-15.787,15.774c-0.001,2.981,0.833,5.883,2.413,8.396l0.376,0.597l-1.595,5.821l5.973-1.566l0.577,0.342c2.422,1.438,5.2,2.198,8.032,2.199h0.006c8.698,0,15.777-7.077,15.78-15.776C39.795,19.778,38.156,15.814,35.176,12.832z"></path><path fill="#fff" fill-rule="evenodd" d="M19.268,16.045c-0.355-0.79-0.729-0.806-1.068-0.82c-0.277-0.012-0.593-0.011-0.909-0.011c-0.316,0-0.83,0.119-1.265,0.594c-0.435,0.475-1.661,1.622-1.661,3.956c0,2.334,1.7,4.59,1.937,4.906c0.237,0.316,3.282,5.259,8.104,7.161c4.007,1.58,4.823,1.266,5.693,1.187c0.87-0.079,2.807-1.147,3.202-2.255c0.395-1.108,0.395-2.057,0.277-2.255c-0.119-0.198-0.435-0.316-0.909-0.554s-2.807-1.385-3.242-1.543c-0.435-0.158-0.751-0.237-1.068,0.238c-0.316,0.474-1.225,1.543-1.502,1.859c-0.277,0.317-0.554,0.357-1.028,0.119c-0.474-0.238-2.002-0.738-3.815-2.354c-1.41-1.257-2.362-2.81-2.639-3.285c-0.277-0.474-0.03-0.731,0.208-0.968c0.213-0.213,0.474-0.554,0.712-0.831c0.237-0.277,0.316-0.475,0.474-0.791c0.158-0.317,0.079-0.594-0.04-0.831C20.612,19.329,19.69,16.983,19.268,16.045z" clip-rule="evenodd"></path>
+                </svg>
+            </span>
+            <Link to={`https://wa.me/${umkmItem.contact_person}`} target='_blank' className='hover:underline hover:text-blue-400'>
+              {umkmItem.contact_person}
+            </Link>
           </div>
-          <div className="flex items-center mt-4">
-            <svg
-              className="w-6 h-6 mr-2 text-gray-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14c0 1.105-1.343 2-3 2s-3-.895-3-2c0-1.105 1.343-2 3-2s3 .895 3 2z"
-              />
-            </svg>
-            <span className="text-gray-600 mr-4">Binti Masruroh</span>
-            <svg
-              className="w-6 h-6 mr-2 text-gray-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.128a2 2 0 01-2 0L6 7.783a2 2 0 011.131-.448l1.498-4.493A1 1 0 0117.72 3H21a2 2 0 012 2v10a2 2 0 01-2 2H3a2 2 0 01-2-2V5z"
-              />
-            </svg>
-            <span className="text-gray-600">085856489370</span>
-          </div>
-
-          <div className="mt-10 flex flex-col justify-center w-full items-center">
-            <h3 className="text-xl font-bold mt-4 text-center w-full my-3">Alamat</h3>
-            <div className="flex justify-center w-full">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.161600686016!2d112.7707865743299!3d-7.553637644907344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59f16d2c2329%3A0x349443679a72856f!2sWarung%20Makmur%2C%20Jl.%20Abadi%2C%20Suko%2C%20Kec.%20Sukomanunggal%2C%20Kota%20Surabaya%2C%20Jawa%20Timur%2060114!5e0!3m2!1sid!2sid!4v1701285183668!5m2!1sid!2sid"
-                width="70%"
-                height="222.5"
-                className="rounded-lg"
-                allowFullScreen
-                loading="lazy"
-              />
-            </div>
-          </div>
+          <iframe
+            src={umkmItem.google_map_link}
+            width="100%"
+            height="450"
+            className="rounded-lg"
+            allowFullScreen
+            loading="lazy"
+          ></iframe>
         </div>
-        <div className="bg-card p-4 rounded-3xl shadow-lg flex flex-col w-full md:w-1/3 h-max mt-4 mr-4 mb-10">
+        <div className="bg-card p-4 rounded-3xl shadow-lg flex flex-col w-full md:w-1/3 md:mt-16 h-max mt-4 mb-10">
           <h2 className="text-4xl font-bold text-white mb-4 text-center">
             UMKM <span style={{ color: 'yellow' }}>LAINNYA</span>
           </h2>
           <div className="flex flex-col gap-4">
-            <div className="bg-card p-4 rounded-3xl shadow-md flex flex-col text-white">
-              <img
-                src={Pecel}
-                alt="Sego Sambel Cu Mar"
-                className="rounded-lg h-44"
-              />
-              <h3 className="text-xl font-bold mt-4">Sego Sambel Cu Mar</h3>
-              <button className="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-full mt-2">
-                SELENGKAPNYA
-              </button>
-            </div>
-            <div className="bg-card p-4 rounded-3xl shadow-md flex flex-col text-white">
-              <img
-                src={Pecel}
-                alt="Sego Sambel Cu Mar"
-                className="rounded-lg h-44"
-              />
-              <h3 className="text-xl font-bold mt-4">Sego Sambel Cu Mar</h3>
-              <button className="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-full mt-2">
-                SELENGKAPNYA
-              </button>
-            </div>
-            <div className="bg-card p-4 rounded-3xl shadow-md flex flex-col text-white">
-              <img
-                src={Pecel}
-                alt="Sego Sambel Cu Mar"
-                className="rounded-lg h-44"
-              />
-              <h3 className="text-xl font-bold mt-4">Sego Sambel Cu Mar</h3>
-              <button className="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-full mt-2">
-                SELENGKAPNYA
-              </button>
-            </div>
+            {umkm.filter(item => item.uuid !== uuid).slice(0, 3).map((item) => (
+              <div key={item.uuid} className="bg-card p-4 rounded-3xl shadow-md flex flex-col text-white">
+                <img
+                  src={`https://tawangsari.com/api/${item.image_path}`}
+                  alt={item.title}
+                  className="rounded-lg h-44"
+                />
+                <h3 className="text-xl font-bold mt-4">{item.title}</h3>
+                <Link to={`/umkm/${item.uuid}`}>
+                  <button className="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-full mt-2">
+                    SELENGKAPNYA
+                  </button>
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
 }
-

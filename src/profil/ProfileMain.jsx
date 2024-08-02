@@ -1,20 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ProfilTawangsari from "../assets/profil.png";
-
-const galleryImages = [
-  { src: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", alt: "Gallery Image 1" },
-  { src: "https://images.unsplash.com/photo-1722182877533-7378b60bf1e8?q=80&w=2007&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", alt: "Gallery Image 2" },
-  { src: "https://images.unsplash.com/photo-1722072776193-74e134ae6e78?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", alt: "Gallery Image 3" },
-  { src: "https://images.unsplash.com/photo-1722248241751-04ff8a648880?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", alt: "Gallery Image 4" },
-  { src: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", alt: "Gallery Image 5" },
-  { src: "https://images.unsplash.com/photo-1721757178328-b0b7f9db730e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", alt: "Gallery Image 6" },
-  // Add more images as needed
-];
+import useGalleries from '../hooks/useGalleries';
 
 export const ProfileMain = () => {
+  const { galleries, loading, error, fetchGalleries } = useGalleries();
+
+  useEffect(() => {
+    fetchGalleries();
+  }, [fetchGalleries]);
+
   const settings = {
     dots: true,
     infinite: false,
@@ -61,38 +58,54 @@ export const ProfileMain = () => {
             className="w-full h-auto object-cover rounded-lg shadow-lg mb-4"
           />
           <h2 className="text-2xl font-semibold mb-2">Deskripsi</h2>
-          <p>
-            Tawangsari adalah sebuah kelurahan yang terletak di Kecamatan Garum, Kabupaten Blitar, Jawa Timur, Indonesia. Kelurahan Tawangsari berfungsi sebagai ibu kota kecamatan Garum dan merupakan lokasi dari kantor muspika, yang mencakup kantor kecamatan, kantor polsek, dan koramil.
+          <p className='text-justify'>
+          Tawangsari adalah sebuah kelurahan yang terletak di Kecamatan Garum, Kabupaten Blitar, 
+          Jawa Timur, Indonesia. Kelurahan Tawangsari berfungsi sebagai ibu kota kecamatan Garum 
+          dan merupakan lokasi dari kantor muspika, yang mencakup kantor kecamatan, kantor polsek, dan koramil.
+          <br></br>
+          Kelurahan ini berbatasan dengan Desa Sidodadi di sebelah utara, Desa Slorok dan Kelurahan Bence di sebelah timur, 
+          Kelurahan Sumberdiren, Garum, dan Bence di sebelah selatan, serta Kecamatan Nglegok dan Desa Pojok di sebelah barat. 
+          Dikutip dari Wikipedia, Kelurahan Tawangsari memiliki luas wilayah sebesar 4,56 hektar. Dengan jumlah penduduk 
+          sekitar 7.884 jiwa pada tahun 2024, yang terdiri dari 3.911 laki-laki dan 3.973 perempuan.
           </p>
         </div>
 
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-2">Sejarah</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet tincidunt odio. Suspendisse vulputate sapien porta arcu interdum accumsan. Suspendisse varius sed sem sed interdum. Sed at consectetur metus, non finibus turpis. Pellentesque maximus, ligula non fermentum facilisis, arcu arcu consequat mi, et mollis quam eros eget ligula. Integer malesuada eget nisl at porta. Nunc id magna neque. Aliquam risus arcu, suscipit ut pretium a, semper at dolor. Ut ultricies fringilla justo, ut mollis risus laoreet nec. us elit non arcu porttitor, eget luctus massa eleifend.
-          </p>
-        </div>
-
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-2">Destinasi Pilihan di Tawangsari</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet tincidunt odio. Suspendisse vulputate sapien porta arcu interdum accumsan. Suspendisse varius sed sem sed interdum. Sed at consectetur metus, non finibus turpis. Pellentesque maximus, ligula non fermentum facilisis, arcu arcu consequat mi, et mollis quam eros eget ligula. Integer malesuada eget nisl at porta. Nunc id magna neque. Aliquam risus arcu, suscipit ut pretium a, semper at dolor. Ut ultricies fringilla justo, ut mollis risus laoreet nec. us elit non arcu porttitor, eget luctus massa eleifend.
+          <h2 className="text-2xl font-semibold mb-2">Wilayah</h2>
+          <p className='text-justify'>
+            Desa Tawangsari di Kecamatan Garum, Kabupaten Blitar, terdiri dari empat wilayah 
+            utama yang memiliki karakteristik masing-masing. Wilayah Tawangsari terletak di 
+            pusat kelurahan, dengan permukiman padat penduduk dan sebagian besar wilayahnya 
+            datar dengan sedikit bukit. Di sebelah timur Tawangsari, terdapat wilayah Ngebrak 
+            yang memiliki lahan pertanian cukup luas dan wilayahnya lebih berbukit dibandingkan 
+            dengan Tawangsari. Di sebelah barat Tawangsari, terdapat wilayah Tawangrejo yang juga 
+            memiliki lahan pertanian dan kebun dengan kontur wilayah agak berbukit serta beberapa dataran. 
+            Terakhir, wilayah Tawangbrak yang terletak di sebelah selatan Tawangsari memiliki 
+            campuran antara lahan permukiman dan pertanian, dengan kontur wilayah yang cenderung datar 
+            namun memiliki beberapa area berbukit. Setiap wilayah ini memberikan kontribusi beragam terhadap 
+            potensi ekonomi dan kehidupan sosial Desa Tawangsari.
           </p>
         </div>
 
         <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-2">Galeri</h2>
-          <Slider {...settings}>
-            {galleryImages.map((image, index) => (
-              <div key={index} className="p-2">
-                <img 
-                  src={image.src} 
-                  alt={image.alt} 
-                  className="w-full h-52 object-cover rounded-lg shadow-lg"
-                />
-              </div>
-            ))}
-          </Slider>
+          {loading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p>Error loading gallery</p>
+          ) : (
+            <Slider {...settings}>
+              {galleries.map((image, index) => (
+                <div key={index} className="p-2">
+                  <img 
+                    src={`https://tawangsari.com/api/${image.image_path}`} 
+                    alt={image.title} 
+                    className="w-full h-52 object-cover rounded-lg shadow-lg"
+                  />
+                </div>
+              ))}
+            </Slider>
+          )}
         </div>
       </div>
     </div>

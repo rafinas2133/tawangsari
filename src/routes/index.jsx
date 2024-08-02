@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
     element: <BeritaPage />,
   },
   {
-    path: '/berita/:id',
+    path: '/berita/:uuid',
     element: <BeritaDetailPage />,
   },
   {
@@ -35,7 +35,7 @@ export const router = createBrowserRouter([
     element: <UMKMPage />,
   },
   {
-    path: '/umkm/:id',
+    path: '/umkm/:uuid',
     element: <UMKMDetailPage />,
   },
   {

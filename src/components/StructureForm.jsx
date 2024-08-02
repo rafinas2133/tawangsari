@@ -1,6 +1,9 @@
+// components/StructureForm.js
 import React, { useState, useEffect } from 'react';
 import useStructures from '../hooks/useStructures';
-import Modal from '../components/Modal';
+import Modal from './Modal';
+import Input from './Input';
+import Form from './Form';
 
 const StructureForm = () => {
   const [structure, setStructure] = useState({
@@ -19,7 +22,7 @@ const StructureForm = () => {
   const [editItem, setEditItem] = useState(null);
 
   useEffect(() => {
-    fetchStructures(); // Ensure fetchStructures is called
+    fetchStructures();
   }, [fetchStructures]);
 
   const handleChange = (e) => {
@@ -99,68 +102,21 @@ const StructureForm = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="bg-white p-4 shadow-md">
+      <Form onSubmit={handleSubmit} loading={loading}>
         <h2 className="text-2xl mb-4">{editItem ? 'Edit Structure' : 'Add Structure'}</h2>
-        <div className="mb-4">
-          <label className="block mb-2">Title</label>
-          <input
-            name="level"
-            value={structure.level}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Name</label>
-          <input
-            name="name"
-            value={structure.name}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">NIP</label>
-          <input
-            name="nip"
-            value={structure.nip}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Upper Level</label>
-          <select
-            name="upper_level_uuid"
-            value={structure.upper_level_uuid}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          >
-            <option value="">Select an upper level</option>
-            {structures.map((s) => (
-              <option key={s.uuid} value={s.uuid}>
-                {s.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Image</label>
-          <input
-            name="image"
-            type="file"
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          {editItem ? 'Update' : 'Submit'}
-        </button>
-        {loading && <p>Loading...</p>}
-      </form>
+        <Input label="Title" name="level" value={structure.level} onChange={handleChange} />
+        <Input label="Name" name="name" value={structure.name} onChange={handleChange} />
+        <Input label="NIP" name="nip" value={structure.nip} onChange={handleChange}/>
+        <Input 
+          label="Upper Level" 
+          name="upper_level_uuid" 
+          value={structure.upper_level_uuid} 
+          onChange={handleChange} 
+          type="select" 
+          options={structures.map(s => ({ value: s.uuid, label: s.name }))}
+        />
+        <Input label="Image" name="image" type="file" onChange={handleChange} />
+      </Form>
 
       <div className="mt-8">
         <h2 className="text-2xl mb-4">Structure List</h2>
@@ -204,66 +160,26 @@ const StructureForm = () => {
         message={modalMessage}
       >
         {editItem && (
-          <form onSubmit={handleSubmit} className="bg-white p-4 shadow-md">
-            <div className="mb-4">
-              <label className="block mb-2">Title</label>
-              <input
-                name="level"
-                value={structure.level}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Name</label>
-              <input
-                name="name"
-                value={structure.name}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">NIP</label>
-              <input
-                name="nip"
-                value={structure.nip}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Upper Level</label>
-              <select
-                name="upper_level_uuid"
-                value={structure.upper_level_uuid}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-              >
-                <option value="">Select an upper level</option>
-                {structures.map((s) => (
-                  <option key={s.uuid} value={s.uuid}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Image</label>
-              <input
-                name="image"
-                type="file"
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-              />
-            </div>
+          <Form onSubmit={handleSubmit} loading={loading}>
+            <Input label="Title" name="level" value={structure.level} onChange={handleChange} />
+            <Input label="Name" name="name" value={structure.name} onChange={handleChange} />
+            <Input label="NIP" name="nip" value={structure.nip} onChange={handleChange} />
+            <Input 
+              label="Upper Level" 
+              name="upper_level_uuid" 
+              value={structure.upper_level_uuid} 
+              onChange={handleChange} 
+              type="select" 
+              options={structures.map(s => ({ value: s.uuid, label: s.name }))}
+            />
+            <Input label="Image" name="image" type="file" onChange={handleChange} />
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded"
             >
               Update
             </button>
-          </form>
+          </Form>
         )}
       </Modal>
 
@@ -287,3 +203,4 @@ const StructureForm = () => {
 };
 
 export default StructureForm;
+

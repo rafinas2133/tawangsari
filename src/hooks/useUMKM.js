@@ -9,7 +9,7 @@ const useUMKM = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchUMKM = useCallback (async () => {
+  const fetchUMKM = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get(API_URL);
@@ -19,7 +19,7 @@ const useUMKM = () => {
       setError(err);
       setLoading(false);
     }
-  },[]);
+  }, []);
 
   const addUMKM = async (newItem) => {
     setLoading(true);
@@ -82,9 +82,9 @@ const useUMKM = () => {
 
   useEffect(() => {
     fetchUMKM();
-  }, []);
+  }, [fetchUMKM]);
 
-  return { umkm, loading, error, addUMKM, updateUMKM, deleteUMKM };
+  return { umkm, loading, error, addUMKM, updateUMKM, deleteUMKM, fetchUMKM };
 };
 
 export default useUMKM;

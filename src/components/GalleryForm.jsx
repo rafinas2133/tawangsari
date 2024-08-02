@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Modal from './Modals';
+import Modal from './Modal';
 
 const GalleryForm = ({ galleries, addGallery, updateGallery, deleteGallery, loading, error }) => {
   const [newItem, setNewItem] = useState({
