@@ -76,7 +76,7 @@ export const BeritaDetail = () => {
                         </div>
                         <div
                             className="bg-card md:h-80 text-white text-left p-4 rounded-lg flex flex-col justify-between">
-                            <h5 className="text-xl 2xl:text-3xl xl:text-lg lg:text-xl font-bold mb-2">{item.title}</h5>
+                            <h5 className="text-xl xl:text-lg lg:text-xl font-bold mb-2">{item.title.split(' ').slice(0, 7).join(' ')}...</h5>
                             <p className="text-sm text-yellow-400 mb-4">Oleh {item["uploaded_by"]} | {new Date(item["created_at"]).toLocaleDateString('id-ID', {
                                 day: '2-digit', month: 'long', year: 'numeric'
                             })}</p>

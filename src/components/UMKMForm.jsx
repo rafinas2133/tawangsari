@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import useUMKM from '../hooks/useUMKM';
+import { fetchUmkmsData, postUmkm, updateUmkm, deleteUmkm } from '../api/umkmsAPI';
 import Modal from './Modal';
-import Input from './Input';
 import Form from './Form';
+import Table from './Table';
 
 const UMKMForm = () => {
   const [umkmItem, setUMKMItem] = useState({
@@ -10,21 +10,51 @@ const UMKMForm = () => {
     description: '',
     owner: '',
     contact_person: '',
-    address: '',
     image: null,
     google_map_link: ''
   });
-  const { addUMKM, updateUMKM, deleteUMKM, loading, error, fetchUMKM, umkmList = [] } = useUMKM();
-
+  const [umkmList, setUMKMList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [editItem, setEditItem] = useState(null);
 
+  const fields = [
+    { name: 'title', label: 'Title', type: 'text' },
+    { name: 'description', label: 'Description', type: 'textarea' },
+    { name: 'owner', label: 'Owner', type: 'text' },
+    { name: 'category', label: 'Category', type: 'text' },
+    { name: 'contact_person', label: 'Contact Person', type: 'text' },
+    { name: 'google_map_link', label: 'Google Maps Link', type: 'text' },
+    { name: 'image', label: 'Image', type: 'file' }
+  ];
+
+  const columns = [
+    { label: 'Title', accessor: 'title' },
+    { label: 'Description', accessor: 'description' },
+    { label: 'Category', accessor: 'category' },
+    { label: 'Owner', accessor: 'owner' },
+    { label: 'Contact Person', accessor: 'contact_person' },
+  ];
+
   useEffect(() => {
-    fetchUMKM();
-  }, [fetchUMKM]);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchUmkmsData();
+        setUMKMList(data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -36,13 +66,14 @@ const UMKMForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (editItem) {
-        await updateUMKM(editItem.uuid, umkmItem);
+        await updateUmkm(editItem.uuid, umkmItem);
         setModalTitle('Success');
         setModalMessage('UMKM updated successfully');
       } else {
-        await addUMKM(umkmItem);
+        await postUmkm(umkmItem);
         setModalTitle('Success');
         setModalMessage('UMKM added successfully');
       }
@@ -56,10 +87,13 @@ const UMKMForm = () => {
         google_map_link: ''
       });
       setEditItem(null);
+      const data = await fetchUmkmsData();
+      setUMKMList(data);
     } catch (err) {
       setModalTitle('Error');
       setModalMessage(err.response?.data?.message || 'An error occurred');
     } finally {
+      setLoading(false);
       setModalVisible(true);
     }
   };
@@ -86,14 +120,18 @@ const UMKMForm = () => {
   };
 
   const confirmDelete = async () => {
+    setLoading(true);
     try {
-      await deleteUMKM(editItem.uuid);
+      await deleteUmkm(editItem.uuid);
       setModalTitle('Success');
       setModalMessage('UMKM deleted successfully');
+      const data = await fetchUmkmsData();
+      setUMKMList(data);
     } catch (err) {
       setModalTitle('Error');
       setModalMessage(err.response?.data?.message || 'An error occurred');
     } finally {
+      setLoading(false);
       setConfirmVisible(false);
       setModalVisible(true);
       setEditItem(null);
@@ -106,88 +144,55 @@ const UMKMForm = () => {
   };
 
   return (
-    <div>
-      <Form onSubmit={handleSubmit} loading={loading}>
-        <h2 className="text-2xl mb-4">{editItem ? 'Edit UMKM' : 'Add UMKM'}</h2>
-        <Input label="Title" name="title" value={umkmItem.title} onChange={handleChange} />
-        <Input label="Description" name="description" value={umkmItem.description} onChange={handleChange} type="textarea" />
-        <Input label="Owner" name="owner" value={umkmItem.owner} onChange={handleChange} />
-        <Input label="Contact Person" name="contact_person" value={umkmItem.contact_person} onChange={handleChange} />
-        <Input label="Google Maps Link" name="google_map_link" value={umkmItem.google_map_link} onChange={handleChange} />
-        <Input label="Image" name="image" type="file" onChange={handleChange} />
-      </Form>
-
-      <div className="mt-8">
-        <h2 className="text-2xl mb-4">UMKM List</h2>
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th className="py-2">Title</th>
-              <th className="py-2">Description</th>
-              <th className="py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {umkmList.map((item) => (
-              <tr key={item.uuid}>
-                <td className="border px-4 py-2">{item.title}</td>
-                <td className="border px-4 py-2">{item.description}</td>
-                <td className="border px-4 py-2">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(item)}
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">UMKM Management</h2>
+        <button
+          onClick={() => {
+            setEditItem(null);
+            setUMKMItem({
+              title: '',
+              description: '',
+              owner: '',
+              contact_person: '',
+              address: '',
+              image: null,
+              google_map_link: ''
+            });
+            setModalTitle('Add UMKM');
+            setModalMessage('Fill in the UMKM details below');
+            setModalVisible(true);
+          }}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Add UMKM
+        </button>
       </div>
+
+      <Table data={umkmList} columns={columns} onEdit={handleEdit} onDelete={handleDelete} />
 
       <Modal
         show={modalVisible}
         onClose={handleCloseModal}
         title={modalTitle}
-        message={modalMessage}
       >
-        {editItem && (
-          <Form onSubmit={handleSubmit} loading={loading}>
-            <Input label="Title" name="title" value={umkmItem.title} onChange={handleChange} />
-            <Input label="Description" name="description" value={umkmItem.description} onChange={handleChange} type="textarea" />
-            <Input label="Owner" name="owner" value={umkmItem.owner} onChange={handleChange} />
-            <Input label="Contact Person" name="contact_person" value={umkmItem.contact_person} onChange={handleChange} />
-            <Input label="Google Maps Link" name="google_map_link" value={umkmItem.google_map_link} onChange={handleChange} />
-            <Input label="Image" name="image" type="file" onChange={handleChange} />
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-              Update
-            </button>
-          </Form>
-        )}
+        <Form onSubmit={handleSubmit} fields={fields} handleChange={handleChange} data={umkmItem} loading={loading} />
       </Modal>
 
-      {confirmVisible && (
-        <Modal
-          show={confirmVisible}
-          onClose={handleCloseModal}
-          title="Confirm Delete"
-          message="Are you sure you want to delete this item?"
-        >
+      <Modal
+        show={confirmVisible}
+        onClose={handleCloseModal}
+        title="Confirm Delete"
+      >
+        <div className="flex justify-center items-center">
           <button onClick={confirmDelete} className="bg-red-500 text-white px-4 py-2 rounded mr-2">
             Confirm
           </button>
           <button onClick={handleCloseModal} className="bg-gray-500 text-white px-4 py-2 rounded">
             Cancel
           </button>
-        </Modal>
-      )}
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const API_URL = 'https://tawangsari.com/api/news';
+const API_URL = 'https://tawangsari.com/api/galleries';
 const AUTH_TOKEN = localStorage.getItem('token');
 
-export const fetchNewsData = async () => {
+export const fetchGalleriesData = async () => {
     // eslint-disable-next-line no-useless-catch
     try {
         const response = await axios.get(API_URL);
@@ -13,7 +13,7 @@ export const fetchNewsData = async () => {
     }
 };
 
-export const fetchNewsById = async (uuid) => {
+export const fetchGalleriesById = async (uuid) => {
     // eslint-disable-next-line no-useless-catch
     try {
         const response = await axios.get(`${API_URL}/${uuid}`);
@@ -23,12 +23,12 @@ export const fetchNewsById = async (uuid) => {
     }
 };
 
-export const postNews = async (newsData) => {
+export const postGalleries = async (GalleriesData) => {
     // eslint-disable-next-line no-useless-catch
     try {
         const formData = new FormData();
-        for (const key in newsData) {
-            formData.append(key, newsData[key]);
+        for (const key in GalleriesData) {
+            formData.append(key, GalleriesData[key]);
         }
 
         const response = await axios.post(API_URL, formData, {
@@ -44,7 +44,7 @@ export const postNews = async (newsData) => {
     }
 };
 
-export const updateNews = async (uuid, updatedItem) => {
+export const updateGalleries = async (uuid, updatedItem) => {
     // eslint-disable-next-line no-useless-catch
     try {
         const formData = new FormData();
@@ -65,7 +65,7 @@ export const updateNews = async (uuid, updatedItem) => {
     }
 };
 
-export const deleteNews = async (uuid) => {
+export const deleteGalleries = async (uuid) => {
     // eslint-disable-next-line no-useless-catch
     try {
         const response = await axios.delete(`${API_URL}/${uuid}`, {

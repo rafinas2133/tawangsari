@@ -1,50 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchGalleriesData, postGalleries, updateGalleries, deleteGalleries } from '../api/galleriesAPI';
 import Modal from './Modal';
+import Form from './Form';
+import Table from './Table';
 
-const GalleryForm = ({ galleries, addGallery, updateGallery, deleteGallery, loading, error }) => {
-  const [newItem, setNewItem] = useState({
-    images: []
+const GalleriesForm = () => {
+  const [galleriesItem, setGalleriesItem] = useState({
+    image: null,
   });
-  const [editItem, setEditItem] = useState(null);
+  const [galleriesList, setGalleriesList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
+  const [editItem, setEditItem] = useState(null);
 
-  const handleImageChange = (e) => {
-    setNewItem({
-      ...newItem,
-      images: [...e.target.files]
+  const fields = [
+    { name: 'image', label: 'Image', type: 'file' }
+  ];
+
+  const columns = [
+    { label: 'Image', accessor: 'image' },
+  ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchGalleriesData();
+        setGalleriesList(data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    setGalleriesItem({
+      ...galleriesItem,
+      [name]: files ? files[0] : value
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (editItem) {
-        await updateGallery(editItem.uuid, newItem);
+        await updateGalleries(editItem.uuid, galleriesItem);
         setModalTitle('Success');
-        setModalMessage('Gallery updated successfully');
+        setModalMessage('Galleries updated successfully');
       } else {
-        await addGallery(newItem);
+        await postGalleries(galleriesItem);
         setModalTitle('Success');
-        setModalMessage('Gallery added successfully');
+        setModalMessage('Galleries added successfully');
       }
-      setNewItem({
-        images: []
+      setGalleriesItem({
+        image: null,
       });
       setEditItem(null);
+      const data = await fetchGalleriesData();
+      setGalleriesList(data);
     } catch (err) {
       setModalTitle('Error');
       setModalMessage(err.response?.data?.message || 'An error occurred');
     } finally {
+      setLoading(false);
       setModalVisible(true);
     }
   };
 
   const handleEdit = (item) => {
     setEditItem(item);
-    setNewItem(item);
+    setGalleriesItem({
+      image: null,
+    });
+    setModalTitle('Edit Galleries');
+    setModalMessage('Edit the Galleries details below');
     setModalVisible(true);
   };
 
@@ -54,14 +93,18 @@ const GalleryForm = ({ galleries, addGallery, updateGallery, deleteGallery, load
   };
 
   const confirmDelete = async () => {
+    setLoading(true);
     try {
-      await deleteGallery(editItem.uuid);
+      await deleteGalleries(editItem.uuid);
       setModalTitle('Success');
-      setModalMessage('Gallery deleted successfully');
+      setModalMessage('Galleries deleted successfully');
+      const data = await fetchGalleriesData();
+      setGalleriesList(data);
     } catch (err) {
       setModalTitle('Error');
       setModalMessage(err.response?.data?.message || 'An error occurred');
     } finally {
+      setLoading(false);
       setConfirmVisible(false);
       setModalVisible(true);
       setEditItem(null);
@@ -74,80 +117,51 @@ const GalleryForm = ({ galleries, addGallery, updateGallery, deleteGallery, load
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="bg-white p-4 shadow-md">
-        <h2 className="text-2xl mb-4">{editItem ? 'Edit Gallery' : 'Add Gallery'}</h2>
-        <div className="mb-4">
-          <label className="block mb-2">Images</label>
-          <input name="images" type="file" multiple onChange={handleImageChange} className="w-full px-3 py-2 border rounded" />
-        </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-          {editItem ? 'Update' : 'Submit'}
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Galleries Management</h2>
+        <button
+          onClick={() => {
+            setEditItem(null);
+            setGalleriesItem({
+              image: null,
+            });
+            setModalTitle('Add Galleries');
+            setModalMessage('Fill in the Galleries details below');
+            setModalVisible(true);
+          }}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Add Galleries
         </button>
-        {loading && <p>Loading...</p>}
-      </form>
-
-      <div className="mt-8">
-        <h2 className="text-2xl mb-4">Gallery List</h2>
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th className="py-2">Images</th>
-              <th className="py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {galleries.map((item) => (
-              <tr key={item.uuid}>
-                <td className="border px-4 py-2">
-                  {item.images.map((img, index) => (
-                    <img key={index} src={`https://tawangsari.com/${img}`} alt="Gallery" className="w-16 h-16 inline-block mr-2" />
-                  ))}
-                </td>
-                <td className="border px-4 py-2">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(item)}
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
+
+      <Table data={galleriesList} columns={columns} onEdit={handleEdit} onDelete={handleDelete} />
 
       <Modal
         show={modalVisible}
         onClose={handleCloseModal}
         title={modalTitle}
-        message={modalMessage}
-      />
+      >
+        <Form onSubmit={handleSubmit} fields={fields} handleChange={handleChange} data={galleriesItem} loading={loading} />
+      </Modal>
 
-      {confirmVisible && (
-        <Modal
-          show={confirmVisible}
-          onClose={handleCloseModal}
-          title="Confirm Delete"
-          message="Are you sure you want to delete this item?"
-        >
+      <Modal
+        show={confirmVisible}
+        onClose={handleCloseModal}
+        title="Confirm Delete"
+      >
+        <div className="flex justify-center items-center">
           <button onClick={confirmDelete} className="bg-red-500 text-white px-4 py-2 rounded mr-2">
             Confirm
           </button>
           <button onClick={handleCloseModal} className="bg-gray-500 text-white px-4 py-2 rounded">
             Cancel
           </button>
-        </Modal>
-      )}
+        </div>
+      </Modal>
     </div>
   );
 };
 
-export default GalleryForm;
+export default GalleriesForm;

@@ -1,40 +1,51 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from 'react';
-import { postNews, updateNews, deleteNews, fetchNewsData } from '../api/newsAPI';
-import Modal from '../components/Modal';
-import Input from '../components/Input';
-import Form from '../components/Form';
+import { fetchNewsData, postNews, updateNews, deleteNews } from '../api/newsAPI';
+import Modal from './Modal';
+import Form from './Form';
+import Table from './Table';
 
 const NewsForm = () => {
   const [newsItem, setNewsItem] = useState({
     title: '',
     content: '',
-    image: null
+    image: null,
+    uploaded_by: '',
+    created_at: ''
   });
-  const [news, setNews] = useState([]);
+  const [newsList, setNewsList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [editItem, setEditItem] = useState(null);
 
+  const fields = [
+    { name: 'title', label: 'Title', type: 'text' },
+    { name: 'content', label: 'Content', type: 'textarea' },
+    { name: 'image', label: 'Image', type: 'file' },
+  ];
+
+  const columns = [
+    { label: 'Title', accessor: 'title' },
+    { label: 'Content', accessor: 'content' },
+  ];
+
   useEffect(() => {
-    const getNews = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
         const data = await fetchNewsData();
-        setNews(data);
+        setNewsList(data);
       } catch (err) {
-        setError(err.message);
+        setError(err);
       } finally {
         setLoading(false);
       }
     };
 
-    getNews().then();
+    fetchData();
   }, []);
 
   const handleChange = (e) => {
@@ -50,7 +61,7 @@ const NewsForm = () => {
     setLoading(true);
     try {
       if (editItem) {
-        await updateNews(editItem["uuid"], newsItem);
+        await updateNews(editItem.uuid, newsItem);
         setModalTitle('Success');
         setModalMessage('News updated successfully');
       } else {
@@ -61,9 +72,13 @@ const NewsForm = () => {
       setNewsItem({
         title: '',
         content: '',
-        image: null
+        image: null,
+        uploaded_by: '',
+        created_at: ''
       });
       setEditItem(null);
+      const data = await fetchNewsData();
+      setNewsList(data);
     } catch (err) {
       setModalTitle('Error');
       setModalMessage(err.response?.data?.message || 'An error occurred');
@@ -78,7 +93,9 @@ const NewsForm = () => {
     setNewsItem({
       title: item.title || '',
       content: item.content || '',
-      image: item.image || null
+      image: null,
+      uploaded_by: item.uploaded_by || '',
+      created_at: item.created_at || ''
     });
     setModalTitle('Edit News');
     setModalMessage('Edit the news details below');
@@ -93,10 +110,11 @@ const NewsForm = () => {
   const confirmDelete = async () => {
     setLoading(true);
     try {
-      await deleteNews(editItem["uuid"]);
+      await deleteNews(editItem.uuid);
       setModalTitle('Success');
       setModalMessage('News deleted successfully');
-      setNews(news.filter(n => n["uuid"] !== editItem["uuid"]));
+      const data = await fetchNewsData();
+      setNewsList(data);
     } catch (err) {
       setModalTitle('Error');
       setModalMessage(err.response?.data?.message || 'An error occurred');
@@ -113,98 +131,55 @@ const NewsForm = () => {
     setConfirmVisible(false);
   };
 
-  if(error){
-    setModalTitle('Error');
-    setModalMessage(error.toString);
-  }
-
   return (
-      <div>
-        <Form onSubmit={handleSubmit} loading={loading}>
-          <h2 className="text-2xl mb-4">{editItem ? 'Edit News' : 'Add News'}</h2>
-          <Input label="Title" name="title" value={newsItem.title} onChange={handleChange} />
-          <Input label="Content" name="content" value={newsItem.content} onChange={handleChange} type="textarea" />
-          <Input label="Image" name="image" type="file" onChange={handleChange} />
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-            {editItem ? 'Update' : 'Add'}
-          </button>
-        </Form>
-
-        <div className="mt-8">
-          <h2 className="text-2xl mb-4">News List</h2>
-          <table className="min-w-full bg-white">
-            <thead>
-            <tr>
-              <th className="py-2">Title</th>
-              <th className="py-2">Content</th>
-              <th className="py-2">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {news && news.length > 0 ? (
-                news.map((item) => (
-                    <tr key={item["uuid"]}>
-                      <td className="border px-4 py-2">{item.title}</td>
-                      <td className="border px-4 py-2">{item.content}</td>
-                      <td className="border px-4 py-2">
-                        <button
-                            onClick={() => handleEdit(item)}
-                            className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                        >
-                          Edit
-                        </button>
-                        <button
-                            onClick={() => handleDelete(item)}
-                            className="bg-red-500 text-white px-4 py-2 rounded"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                ))
-            ) : (
-                <tr>
-                  <td colSpan="3" className="border px-4 py-2 text-center">No news available</td>
-                </tr>
-            )}
-            </tbody>
-          </table>
-        </div>
-
-        <Modal
-            show={modalVisible}
-            onClose={handleCloseModal}
-            title={modalTitle}
-            message={modalMessage}
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">News Management</h2>
+        <button
+          onClick={() => {
+            setEditItem(null);
+            setNewsItem({
+              title: '',
+              content: '',
+              image: null,
+              uploaded_by: '',
+              created_at: ''
+            });
+            setModalTitle('Add News');
+            setModalMessage('Fill in the news details below');
+            setModalVisible(true);
+          }}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
         >
-          {editItem && (
-              <Form onSubmit={handleSubmit} loading={loading}>
-                <Input label="Title" name="title" value={newsItem.title} onChange={handleChange} />
-                <Input label="Content" name="content" value={newsItem.content} onChange={handleChange} type="textarea" />
-                <Input label="Image" name="image" type="file" onChange={handleChange} />
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-                  Update
-                </button>
-              </Form>
-          )}
-        </Modal>
-
-        {confirmVisible && (
-            <Modal
-                show={confirmVisible}
-                onClose={handleCloseModal}
-                title="Confirm Delete"
-                message="Are you sure you want to delete this item?"
-            >
-              <button onClick={confirmDelete} className="bg-red-500 text-white px-4 py-2 rounded mr-2">
-                Confirm
-              </button>
-              <button onClick={handleCloseModal} className="bg-gray-500 text-white px-4 py-2 rounded">
-                Cancel
-              </button>
-            </Modal>
-        )}
+          Add News
+        </button>
       </div>
+
+      <Table data={newsList} columns={columns} onEdit={handleEdit} onDelete={handleDelete} />
+
+      <Modal
+        show={modalVisible}
+        onClose={handleCloseModal}
+        title={modalTitle}
+      >
+        <Form onSubmit={handleSubmit} fields={fields} handleChange={handleChange} data={newsItem} loading={loading} />
+      </Modal>
+
+      <Modal
+        show={confirmVisible}
+        onClose={handleCloseModal}
+        title="Confirm Delete"
+      >
+        <div className="flex justify-center items-center">
+          <button onClick={confirmDelete} className="bg-red-500 text-white px-4 py-2 rounded mr-2">
+            Confirm
+          </button>
+          <button onClick={handleCloseModal} className="bg-gray-500 text-white px-4 py-2 rounded">
+            Cancel
+          </button>
+        </div>
+      </Modal>
+    </div>
   );
 };
 

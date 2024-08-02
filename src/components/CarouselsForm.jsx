@@ -1,54 +1,90 @@
-// components/CarouselsForm.js
 import React, { useState, useEffect } from 'react';
-import useCarousels from '../hooks/useCarousels';
+import { fetchCarouselsData, postCarousels, updateCarousels, deleteCarousels } from '../api/carouselsAPI';
 import Modal from './Modal';
-import Input from './Input';
 import Form from './Form';
+import Table from './Table';
 
 const CarouselsForm = () => {
-  const [carousel, setCarousel] = useState({ images: [] });
-  const { carousels, addCarousel, updateCarousel, deleteCarousel, loading, error, fetchCarousels } = useCarousels();
-
+  const [carouselsItem, setCarouselsItem] = useState({
+    image: null,
+  });
+  const [carouselsList, setCarouselsList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [editItem, setEditItem] = useState(null);
 
-  useEffect(() => {
-    fetchCarousels();
-  }, [fetchCarousels]);
+  const fields = [
+    { name: 'image', label: 'Image', type: 'file' }
+  ];
 
-  const handleImageChange = (e) => {
-    setCarousel({ ...carousel, images: [...e.target.files] });
+  const columns = [
+    { label: 'Image', accessor: 'image' },
+  ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchCarouselsData();
+        setCarouselsList(data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    setCarouselsItem({
+      ...carouselsItem,
+      [name]: files ? files[0] : value
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (editItem) {
-        await updateCarousel(editItem.uuid, carousel);
+        await updateCarousels(editItem.uuid, carouselsItem);
         setModalTitle('Success');
-        setModalMessage('Carousel updated successfully');
+        setModalMessage('Carousels updated successfully');
       } else {
-        await addCarousel(carousel);
+        await postCarousels(carouselsItem);
         setModalTitle('Success');
-        setModalMessage('Carousel added successfully');
+        setModalMessage('Carousels added successfully');
       }
-      setCarousel({ images: [] });
+      setCarouselsItem({
+        image: null,
+      });
       setEditItem(null);
+      const data = await fetchCarouselsData();
+      setCarouselsList(data);
     } catch (err) {
       setModalTitle('Error');
       setModalMessage(err.response?.data?.message || 'An error occurred');
     } finally {
+      setLoading(false);
       setModalVisible(true);
     }
   };
 
   const handleEdit = (item) => {
     setEditItem(item);
-    setCarousel(item);
-    setModalVisible(false);
+    setCarouselsItem({
+      image: null,
+    });
+    setModalTitle('Edit Carousels');
+    setModalMessage('Edit the Carousels details below');
+    setModalVisible(true);
   };
 
   const handleDelete = async (item) => {
@@ -57,14 +93,18 @@ const CarouselsForm = () => {
   };
 
   const confirmDelete = async () => {
+    setLoading(true);
     try {
-      await deleteCarousel(editItem.uuid);
+      await deleteCarousels(editItem.uuid);
       setModalTitle('Success');
-      setModalMessage('Carousel deleted successfully');
+      setModalMessage('Carousels deleted successfully');
+      const data = await fetchCarouselsData();
+      setCarouselsList(data);
     } catch (err) {
       setModalTitle('Error');
       setModalMessage(err.response?.data?.message || 'An error occurred');
     } finally {
+      setLoading(false);
       setConfirmVisible(false);
       setModalVisible(true);
       setEditItem(null);
@@ -77,71 +117,49 @@ const CarouselsForm = () => {
   };
 
   return (
-    <div>
-      <Form onSubmit={handleSubmit} loading={loading}>
-        <h2 className="text-2xl mb-4">{editItem ? 'Edit Carousel' : 'Add Carousel'}</h2>
-        <Input label="Images" name="images" type="file" multiple onChange={handleImageChange} />
-      </Form>
-
-      <div className="mt-8">
-        <h2 className="text-2xl mb-4">Carousel List</h2>
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th className="py-2">Images</th>
-              <th className="py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {carousels && carousels.map((item) => (
-              <tr key={item.uuid}>
-                <td className="border px-4 py-2">
-                  {item.images && item.images.map((img, index) => (
-                    <img key={index} src={`https://tawangsari.com/${img}`} alt="Carousel" className="w-16 h-16 inline-block mr-2" />
-                  ))}
-                </td>
-                <td className="border px-4 py-2">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(item)}
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Carousels Management</h2>
+        <button
+          onClick={() => {
+            setEditItem(null);
+            setCarouselsItem({
+              image: null,
+            });
+            setModalTitle('Add Carousels');
+            setModalMessage('Fill in the Carousels details below');
+            setModalVisible(true);
+          }}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Add Carousels
+        </button>
       </div>
+
+      <Table data={carouselsList} columns={columns} onEdit={handleEdit} onDelete={handleDelete} />
 
       <Modal
         show={modalVisible}
         onClose={handleCloseModal}
         title={modalTitle}
-        message={modalMessage}
-      />
+      >
+        <Form onSubmit={handleSubmit} fields={fields} handleChange={handleChange} data={carouselsItem} loading={loading} />
+      </Modal>
 
-      {confirmVisible && (
-        <Modal
-          show={confirmVisible}
-          onClose={handleCloseModal}
-          title="Confirm Delete"
-          message="Are you sure you want to delete this item?"
-        >
+      <Modal
+        show={confirmVisible}
+        onClose={handleCloseModal}
+        title="Confirm Delete"
+      >
+        <div className="flex justify-center items-center">
           <button onClick={confirmDelete} className="bg-red-500 text-white px-4 py-2 rounded mr-2">
             Confirm
           </button>
           <button onClick={handleCloseModal} className="bg-gray-500 text-white px-4 py-2 rounded">
             Cancel
           </button>
-        </Modal>
-      )}
+        </div>
+      </Modal>
     </div>
   );
 };

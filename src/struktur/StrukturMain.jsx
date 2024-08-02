@@ -23,7 +23,7 @@ export const StrukturMain = () => {
               <div className="block">
                 <div className='overflow-hidden rounded-lg'>
                   <img
-                    className="w-full h-72 object-cover rounded-lg mb-4"
+                    className="w-full h-96 object-cover rounded-lg mb-4"
                     src={item.image_path ? `https://tawangsari.com/api/${item.image_path}` : Guest}
                     alt={item.name}
                   />

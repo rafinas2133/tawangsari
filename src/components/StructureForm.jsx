@@ -1,77 +1,108 @@
-// components/StructureForm.js
 import React, { useState, useEffect } from 'react';
-import useStructures from '../hooks/useStructures';
+import { fetchStructuresData, postStructures, updateStructures, deleteStructures } from '../api/structuresAPI';
 import Modal from './Modal';
-import Input from './Input';
 import Form from './Form';
+import Table from './Table';
 
-const StructureForm = () => {
-  const [structure, setStructure] = useState({
-    level: '',
+const StructuresForm = () => {
+  const [structuresItem, setStructuresItem] = useState({
     name: '',
+    level: '',
     nip: '',
+    upper_level_uuid: '',
+    address: '',
     image: null,
-    upper_level_uuid: '', // Upper level UUID
   });
-  const { addStructure, updateStructure, deleteStructure, loading, error, fetchStructures, structures } = useStructures();
-
+  const [structuresList, setStructuresList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [editItem, setEditItem] = useState(null);
 
+  const fields = [
+    { name: 'name', label: 'Name', type: 'text' },
+    { name: 'level', label: 'Level', type: 'text' },
+    { name: 'nip', label: 'NIP', type: 'text' },
+    { name: 'upper_level_uuid', label: 'Upper Level', type: 'text' },
+    { name: 'image', label: 'Image', type: 'file' }
+  ];
+
+  const columns = [
+    { label: 'Name', accessor: 'name' },
+    { label: 'Level', accessor: 'level' },
+    { label: 'NIP', accessor: 'nip' },
+  ];
+
   useEffect(() => {
-    fetchStructures();
-  }, [fetchStructures]);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchStructuresData();
+        setStructuresList(data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setStructure({
-      ...structure,
-      [name]: files ? files[0] : value,
+    setStructuresItem({
+      ...structuresItem,
+      [name]: files ? files[0] : value
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (editItem) {
-        await updateStructure(editItem.uuid, structure);
+        await updateStructures(editItem.uuid, structuresItem);
         setModalTitle('Success');
-        setModalMessage('Structure updated successfully');
+        setModalMessage('Structures updated successfully');
       } else {
-        await addStructure(structure);
+        await postStructures(structuresItem);
         setModalTitle('Success');
-        setModalMessage('Structure added successfully');
+        setModalMessage('Structures added successfully');
       }
-      setStructure({
-        level: '',
+      setStructuresItem({
         name: '',
+        level: '',
         nip: '',
+        upper_level_uuid: '',
         image: null,
-        upper_level_uuid: '', // Upper level UUID
       });
       setEditItem(null);
+      const data = await fetchStructuresData();
+      setStructuresList(data);
     } catch (err) {
       setModalTitle('Error');
       setModalMessage(err.response?.data?.message || 'An error occurred');
     } finally {
+      setLoading(false);
       setModalVisible(true);
     }
   };
 
   const handleEdit = (item) => {
     setEditItem(item);
-    setStructure({
-      level: item.level || '',
+    setStructuresItem({
       name: item.name || '',
+      level: item.level || '',
       nip: item.nip || '',
-      image: item.image || null,
-      upper_level_uuid: item.upper_level_uuid || ''
+      upper_level_uuid: item.upper_level_uuid || '',
+      image: null,
     });
-    setModalTitle('Edit Structure');
-    setModalMessage('Edit the structure details below');
+    setModalTitle('Edit Structures');
+    setModalMessage('Edit the Structures details below');
     setModalVisible(true);
   };
 
@@ -81,14 +112,18 @@ const StructureForm = () => {
   };
 
   const confirmDelete = async () => {
+    setLoading(true);
     try {
-      await deleteStructure(editItem.uuid);
+      await deleteStructures(editItem.uuid);
       setModalTitle('Success');
-      setModalMessage('Structure deleted successfully');
+      setModalMessage('Structures deleted successfully');
+      const data = await fetchStructuresData();
+      setStructuresList(data);
     } catch (err) {
       setModalTitle('Error');
       setModalMessage(err.response?.data?.message || 'An error occurred');
     } finally {
+      setLoading(false);
       setConfirmVisible(false);
       setModalVisible(true);
       setEditItem(null);
@@ -101,106 +136,57 @@ const StructureForm = () => {
   };
 
   return (
-    <div>
-      <Form onSubmit={handleSubmit} loading={loading}>
-        <h2 className="text-2xl mb-4">{editItem ? 'Edit Structure' : 'Add Structure'}</h2>
-        <Input label="Title" name="level" value={structure.level} onChange={handleChange} />
-        <Input label="Name" name="name" value={structure.name} onChange={handleChange} />
-        <Input label="NIP" name="nip" value={structure.nip} onChange={handleChange}/>
-        <Input 
-          label="Upper Level" 
-          name="upper_level_uuid" 
-          value={structure.upper_level_uuid} 
-          onChange={handleChange} 
-          type="select" 
-          options={structures.map(s => ({ value: s.uuid, label: s.name }))}
-        />
-        <Input label="Image" name="image" type="file" onChange={handleChange} />
-      </Form>
-
-      <div className="mt-8">
-        <h2 className="text-2xl mb-4">Structure List</h2>
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th className="py-2">Title</th>
-              <th className="py-2">Name</th>
-              <th className="py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {structures.map((item) => (
-              <tr key={item.uuid}>
-                <td className="border px-4 py-2">{item.level}</td>
-                <td className="border px-4 py-2">{item.name}</td>
-                <td className="border px-4 py-2">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(item)}
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Structures Management</h2>
+        <button
+          onClick={() => {
+            setEditItem(null);
+            setStructuresItem({
+              title: '',
+              description: '',
+              owner: '',
+              contact_person: '',
+              address: '',
+              image: null,
+              google_map_link: ''
+            });
+            setModalTitle('Add Structures');
+            setModalMessage('Fill in the Structures details below');
+            setModalVisible(true);
+          }}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Add Structures
+        </button>
       </div>
+
+      <Table data={structuresList} columns={columns} onEdit={handleEdit} onDelete={handleDelete} />
 
       <Modal
         show={modalVisible}
         onClose={handleCloseModal}
         title={modalTitle}
-        message={modalMessage}
       >
-        {editItem && (
-          <Form onSubmit={handleSubmit} loading={loading}>
-            <Input label="Title" name="level" value={structure.level} onChange={handleChange} />
-            <Input label="Name" name="name" value={structure.name} onChange={handleChange} />
-            <Input label="NIP" name="nip" value={structure.nip} onChange={handleChange} />
-            <Input 
-              label="Upper Level" 
-              name="upper_level_uuid" 
-              value={structure.upper_level_uuid} 
-              onChange={handleChange} 
-              type="select" 
-              options={structures.map(s => ({ value: s.uuid, label: s.name }))}
-            />
-            <Input label="Image" name="image" type="file" onChange={handleChange} />
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Update
-            </button>
-          </Form>
-        )}
+        <Form onSubmit={handleSubmit} fields={fields} handleChange={handleChange} data={structuresItem} loading={loading} />
       </Modal>
 
-      {confirmVisible && (
-        <Modal
-          show={confirmVisible}
-          onClose={handleCloseModal}
-          title="Confirm Delete"
-          message="Are you sure you want to delete this item?"
-        >
+      <Modal
+        show={confirmVisible}
+        onClose={handleCloseModal}
+        title="Confirm Delete"
+      >
+        <div className="flex justify-center items-center">
           <button onClick={confirmDelete} className="bg-red-500 text-white px-4 py-2 rounded mr-2">
             Confirm
           </button>
           <button onClick={handleCloseModal} className="bg-gray-500 text-white px-4 py-2 rounded">
             Cancel
           </button>
-        </Modal>
-      )}
+        </div>
+      </Modal>
     </div>
   );
 };
 
-export default StructureForm;
-
+export default StructuresForm;
