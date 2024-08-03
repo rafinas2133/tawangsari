@@ -4,6 +4,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ProfilTawangsari from "../assets/profil.png";
 import useGalleries from '../hooks/useGalleries';
+import Peta from '../assets/maps-transformed1.png';
+import PetaBG from '../assets/maps.png';
 
 export const ProfileMain = () => {
   const { galleries, loading, error, fetchGalleries } = useGalleries();
@@ -50,7 +52,7 @@ export const ProfileMain = () => {
       <div className="bg-card w-full text-white text-center py-4 mb-6">
         <h1 className="font-bold text-3xl mt-28 mb-4 md:text-5xl">PROFIL</h1>
       </div>
-      <div className="w-full h-max pb-10 px-4 py-20 md:px-52 bg-white">
+      <div className="w-full h-max pb-10 px-4 py-20 md:px-52 bg-white" >
         <div className="mb-8">
           <img 
             src={ProfilTawangsari} 
@@ -85,6 +87,7 @@ export const ProfileMain = () => {
             namun memiliki beberapa area berbukit. Setiap wilayah ini memberikan kontribusi beragam terhadap 
             potensi ekonomi dan kehidupan sosial Desa Tawangsari.
           </p>
+          <img src={Peta} alt="Peta Tawang Sari" className='w-full h-max' />
         </div>
 
         <div className="mb-8">
