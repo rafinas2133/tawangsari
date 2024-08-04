@@ -25,7 +25,7 @@ export const Navbar = () => {
     };
 
     return (
-        <nav className="bg-gray-800 z-50 p-4 text-white flex justify-between items-center relative">
+        <nav className="bg-gray-800 z-30 p-4 text-white flex justify-between items-center relative">
             <div className="flex items-center">
                 <button
                     className="block lg:hidden text-white focus:outline-none"

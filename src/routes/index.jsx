@@ -13,6 +13,8 @@ import {AdminUmkmsPage} from "../admin/umkms/AdminUMKMSPage.jsx";
 import {AdminCarouselsPage} from "../admin/images/carousels/AdminCarouselsPage.jsx";
 import {AdminGalleriesPage} from "../admin/images/galleries/AdminGalleriesPage.jsx";
 import {ErrorPage} from "../components/ErrorPage.jsx";
+import {BaganPage} from "../BaganPage.jsx";
+
 
 export const router = createBrowserRouter([
     {
@@ -71,4 +73,8 @@ export const router = createBrowserRouter([
         path: '/admin/galleries',
         element: <AdminGalleriesPage/>,
     },
+    {
+        path:"/testbagan",
+        element: <BaganPage/>
+    }
 ]);

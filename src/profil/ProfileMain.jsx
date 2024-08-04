@@ -4,7 +4,6 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ProfilTawangsari from "../assets/profil.png";
-import Peta from '../assets/maps-transformed1.png';
 import {fetchGalleriesData} from "../api/galleriesAPI.js";
 import {Loading} from "../components/Loading";
 import { ProfileData } from './ProfileData.jsx';
@@ -95,7 +94,7 @@ export const ProfileMain = () => {
                 <div className="mb-8">
                     <h2 className="text-2xl font-semibold mb-2">Wilayah</h2>
                     <p className='text-justify'>
-                        Desa Tawangsari di Kecamatan Garum, Kabupaten Blitar, terdiri dari empat wilayah
+                        Kelurahan Tawangsari di Kecamatan Garum, Kabupaten Blitar, terdiri dari empat wilayah
                         utama yang memiliki karakteristik masing-masing. Wilayah Tawangsari terletak di
                         pusat kelurahan, dengan permukiman padat penduduk dan sebagian besar wilayahnya
                         datar dengan sedikit bukit. Di sebelah timur Tawangsari, terdapat wilayah Ngebrak
@@ -105,7 +104,7 @@ export const ProfileMain = () => {
                         Terakhir, wilayah Tawangbrak yang terletak di sebelah selatan Tawangsari memiliki
                         campuran antara lahan permukiman dan pertanian, dengan kontur wilayah yang cenderung datar
                         namun memiliki beberapa area berbukit. Setiap wilayah ini memberikan kontribusi beragam terhadap
-                        potensi ekonomi dan kehidupan sosial Desa Tawangsari.
+                        potensi ekonomi dan kehidupan sosial Kelurahan Tawangsari.
                     </p>
                     <ProfileData/>
                 </div>
