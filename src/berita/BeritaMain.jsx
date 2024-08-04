@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {fetchNewsData} from "../api/newsAPI.js";
 import news_default from "../assets/news_default.png";
+import {Loading} from "../components/Loading";
 
 export const BeritaMain = () => {
     const [newsItem, setNewsItem] = useState(null);
@@ -25,7 +26,7 @@ export const BeritaMain = () => {
         getNews().then();
     }, []);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <Loading/>;
     if (error) return <div>Error loading news: {error}</div>;
     if (!newsItem) return <div>Berita tidak ditemukan</div>;
 

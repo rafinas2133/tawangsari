@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import Guest from '../assets/structure_default.png';
 import {fetchStructuresData} from "../api/structuresAPI.js";
+import {Loading} from "../components/Loading";
 
 export const StrukturMain = () => {
     const [structures, setStructures] = useState([]);
@@ -24,6 +25,14 @@ export const StrukturMain = () => {
         fetchData().then();
     }, []);
 
+    if (loading) {
+        return <Loading/>;
+    }
+
+    if (error) {
+        return <div>Error loading carousels</div>;
+    }
+
     return (
         <div className='bg-white pt-10'>
             <div className="bg-card w-full text-white text-center py-4 mb-6">
@@ -31,7 +40,7 @@ export const StrukturMain = () => {
             </div>
             <div className="w-full h-max p-12 px-4 md:px-20 bg-white items-center justify-center text-center">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {loading && <p>Loading...</p>}
+                    {loading && <Loading />}
                     {error && <p>Error loading structures: {error.message}</p>}
                     {!loading && !error && structures.map((item) => (
                         <div key={item["uuid"]}

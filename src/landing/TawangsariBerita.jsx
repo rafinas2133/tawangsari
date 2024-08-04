@@ -2,7 +2,8 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {fetchNewsData} from "../api/newsAPI";
-import news_default from "../assets/news_default.png"; // Jika tidak ada gambar default, Anda bisa menghapus ini
+import news_default from "../assets/news_default.png"; 
+import {Loading} from "../components/Loading";
 
 export const TawangsariBerita = () => {
     const [beritaData, setBeritaData] = useState([]);
@@ -26,7 +27,7 @@ export const TawangsariBerita = () => {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Loading/>;
     }
 
     if (error) {

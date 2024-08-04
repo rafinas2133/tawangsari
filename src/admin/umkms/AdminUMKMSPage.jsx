@@ -7,6 +7,7 @@ import {UmkmForm} from '../components/UMKMForm';
 import {Alert} from '../components/Alert';
 import {ConfirmationModal} from '../components/ConfirmationModal';
 import {Footer} from "../components/Footer.jsx";
+import { Loading } from "../components/Loading";
 
 export const AdminUmkmsPage = () => {
     const [umkms, setUmkms] = useState([]);
@@ -107,7 +108,7 @@ export const AdminUmkmsPage = () => {
         setConfirmOpen(true);
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <Loading/>;
 
     const totalPages = Math.ceil(filteredUmkms.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;

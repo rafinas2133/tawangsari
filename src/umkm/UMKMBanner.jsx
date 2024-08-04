@@ -14,7 +14,7 @@ export const UMKMBanner = () => {
                   content="UMKM Kelurahan Tawangsari, Kecamatan Garum, Kabupaten Blitar"/>
             <meta property="og:url" content={`https://tawangsari.com/umkm`}/>
         </Helmet>
-        <div className="relative bg-white w-full min-h-[50vh]  md:h-[40vw] lg:h-[50vw] mt-20 pb-20 overflow-hidden"
+        <div className="relative bg-white w-full min-h-[50vh] md:h-[40vw] lg:h-[50vw] mt-20 pb-20 overflow-hidden"
              style={{backgroundImage: `url(${UMKM})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
             <div
                 className="absolute bg-black bg-opacity-50 inset-0 flex flex-col justify-center items-center text-white p-4 md:p-8">

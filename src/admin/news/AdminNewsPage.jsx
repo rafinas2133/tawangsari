@@ -7,6 +7,7 @@ import {NewsForm} from '../components/NewsForm';
 import {Alert} from '../components/Alert';
 import {ConfirmationModal} from "../components/ConfirmationModal.jsx";
 import {Footer} from "../components/Footer.jsx";
+import { Loading } from "../components/Loading";
 
 export const AdminNewsPage = () => {
     const [news, setNews] = useState([]);
@@ -99,7 +100,7 @@ export const AdminNewsPage = () => {
         setConfirmOpen(true);
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <Loading/>;
 
     const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;

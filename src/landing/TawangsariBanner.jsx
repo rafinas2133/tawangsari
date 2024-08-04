@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import LogoBlitar from "../assets/logoblitar.png";
 import {fetchCarouselsData} from "../api/carouselsAPI.js";
+import {Loading} from "../components/Loading";
 
 export const TawangsariBanner = () => {
     const [carousels, setCarousels] = useState([]);
@@ -55,7 +56,7 @@ export const TawangsariBanner = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Loading/>;
     }
 
     if (error) {

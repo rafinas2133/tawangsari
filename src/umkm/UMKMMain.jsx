@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchUmkmsData } from "../api/umkmsAPI.js";
 import umkm_default from "../assets/umkm_default.png";
+import {Loading} from "../components/Loading";
 
 export const UMKMMain = () => {
     const [umkmsItem, setUmkmsItem] = useState([]);
@@ -31,7 +32,7 @@ export const UMKMMain = () => {
         setCurrentPage(1);
     }, [selectedCategory]);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <Loading />;
     if (error) return <div>Error loading UMKMs: {error}</div>;
     if (!umkmsItem || umkmsItem.length === 0) return <div>UMKMs tidak ditemukan</div>;
 
@@ -51,7 +52,7 @@ export const UMKMMain = () => {
     };
 
     return (
-        <div className="bg-white p-4 sm:p-8 md:p-12 lg:p-20">
+        <div className="bg-white p-4 sm:p-8 md:p-12 lg:p-20 w-full">
             <div className="flex justify-start items-center mb-4">
                 <div className="relative inline-block text-left w-full sm:w-auto">
                     <select

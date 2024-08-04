@@ -5,7 +5,7 @@ import { UMKMMain } from "./UMKMMain";
 
 export const UMKMPage = () => {
     return (
-        <div className="w-screen overflow-x-hidden bg-white min-h-screen">
+        <div className="w-screen overflow-x-hidden bg-white h-screen max-w-screen">
         <TawangsariNavbar />
         <UMKMBanner />
         <UMKMMain />

@@ -15,10 +15,12 @@ export const TawangsariNavbar = () => {
     return (
         <nav
             className="absolute w-screen z-50 flex bg-white h-[80px] items-center justify-between px-4 md:px-8 border-b border-gray-200">
-            <div className="flex items-center space-x-4">
-                <img src={LogoBlitar ? LogoBlitar : ''} alt="Kelurahan Tawangsari" className="h-[30px] lg:h-[50px]"/>
-                <h1 className="text-l lg:text-2xl whitespace-nowrap">Kelurahan Tawangsari</h1>
-            </div>
+            <NavLink to="/">
+                <div className="flex items-center space-x-4">
+                    <img src={LogoBlitar ? LogoBlitar : ''} alt="Kelurahan Tawangsari" className="h-[30px] lg:h-[50px]"/>
+                    <h1 className="text-l lg:text-2xl whitespace-nowrap">Kelurahan Tawangsari</h1>
+                </div>
+            </NavLink>
             <div className="lg:hidden flex items-center">
                 <button onClick={toggleMenu} className="text-3xl">
                     &#9776; {/* Hamburger icon */}

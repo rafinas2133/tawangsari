@@ -6,6 +6,8 @@ import "slick-carousel/slick/slick-theme.css";
 import ProfilTawangsari from "../assets/profil.png";
 import Peta from '../assets/maps-transformed1.png';
 import {fetchGalleriesData} from "../api/galleriesAPI.js";
+import {Loading} from "../components/Loading";
+import { ProfileData } from './ProfileData.jsx';
 
 export const ProfileMain = () => {
     const [galleries, setGalleries] = useState([]);
@@ -105,13 +107,13 @@ export const ProfileMain = () => {
                         namun memiliki beberapa area berbukit. Setiap wilayah ini memberikan kontribusi beragam terhadap
                         potensi ekonomi dan kehidupan sosial Desa Tawangsari.
                     </p>
-                    <img src={Peta ? Peta : ''} alt="Peta TawangSari" className='w-full h-max'/>
+                    <ProfileData/>
                 </div>
 
                 <div className="mb-8">
                     <h2 className="text-2xl font-semibold mb-2">Galeri</h2>
                     {loading ? (
-                        <p>Loading...</p>
+                        <Loading />
                     ) : error ? (
                         <p>Error loading gallery</p>
                     ) : (

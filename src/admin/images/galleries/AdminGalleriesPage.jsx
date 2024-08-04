@@ -7,6 +7,7 @@ import { GalleryForm } from '../../components/GalleryForm';
 import { Alert } from '../../components/Alert';
 import { ConfirmationModal } from '../../components/ConfirmationModal';
 import { Footer } from '../../components/Footer.jsx';
+import { Loading } from "../../components/Loading";
 
 export const AdminGalleriesPage = () => {
     const [galleries, setGalleries] = useState([]);
@@ -96,7 +97,7 @@ export const AdminGalleriesPage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % galleries.length);
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <Loading />;
 
     const totalPages = Math.ceil(galleries.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
