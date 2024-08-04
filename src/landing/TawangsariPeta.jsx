@@ -1,11 +1,12 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
 import pinpoint from '../assets/pinpoint.png';
+import BackgroundProfile from "../assets/freepik-export-20240727103006bMEb 1.png";
 
 export const TawangsariPeta = () => {
     return (
-        <div className="w-full h-max pb-20 px-4 md:px-20 bg-white">
-            <div className="flex flex-col md:flex-row gap-8 md:gap-40">
+        <div className="relative w-full h-max py-20 px-4 md:px-20 bg-white">
+            <div className="flex flex-col md:flex-row gap-8 md:gap-40 relative z-10">
                 <div className='flex flex-col items-center md:w-1/3'>
                     <img src={pinpoint ? pinpoint : ''} alt="pinpoint" className='h-14 mb-4'/>
                     <p className="text-center font-semibold text-xl md:text-3xl px-6 md:px-0">
@@ -25,6 +26,14 @@ export const TawangsariPeta = () => {
                     </iframe>
                 </div>
             </div>
+            <div
+                className="absolute top-0 right-0 w-full h-full bg-no-repeat bg-cover"
+                style={{
+                    backgroundImage: `url(${BackgroundProfile})`,
+                    backgroundSize: 'auto 100%',
+                    transform: 'scaleX(-1)'
+                }}
+            />
         </div>
     );
 }

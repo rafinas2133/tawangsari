@@ -1,12 +1,11 @@
-import axios from 'axios';
+import axiosInstance from './axiosInterceptor';
 
-const API_URL = 'https://tawangsari.com/api/galleries';
-const AUTH_TOKEN = localStorage.getItem('token');
+const API_URL = '/galleries';
 
 export const fetchGalleriesData = async () => {
     // eslint-disable-next-line no-useless-catch
     try {
-        const response = await axios.get(API_URL);
+        const response = await axiosInstance.get(API_URL);
         return response.data.data;
     } catch (err) {
         throw err;
@@ -16,7 +15,7 @@ export const fetchGalleriesData = async () => {
 export const fetchGalleriesById = async (uuid) => {
     // eslint-disable-next-line no-useless-catch
     try {
-        const response = await axios.get(`${API_URL}/${uuid}`);
+        const response = await axiosInstance.get(`${API_URL}/${uuid}`);
         return response.data.data;
     } catch (err) {
         throw err;
@@ -26,14 +25,8 @@ export const fetchGalleriesById = async (uuid) => {
 export const postGalleries = async (GalleriesData) => {
     // eslint-disable-next-line no-useless-catch
     try {
-        const formData = new FormData();
-        for (const key in GalleriesData) {
-            formData.append(key, GalleriesData[key]);
-        }
-
-        const response = await axios.post(API_URL, formData, {
+        const response = await axiosInstance.post(API_URL, GalleriesData, {
             headers: {
-                'Authorization': `Bearer ${AUTH_TOKEN}`,
                 'Content-Type': 'multipart/form-data'
             },
         });
@@ -47,14 +40,9 @@ export const postGalleries = async (GalleriesData) => {
 export const updateGalleries = async (uuid, updatedItem) => {
     // eslint-disable-next-line no-useless-catch
     try {
-        const formData = new FormData();
-        for (const key in updatedItem) {
-            formData.append(key, updatedItem[key]);
-        }
 
-        const response = await axios.post(`${API_URL}/${uuid}`, formData, {
+        const response = await axiosInstance.post(`${API_URL}/${uuid}`, updatedItem, {
             headers: {
-                'Authorization': `Bearer ${AUTH_TOKEN}`,
                 'Content-Type': 'multipart/form-data'
             },
         });
@@ -68,12 +56,7 @@ export const updateGalleries = async (uuid, updatedItem) => {
 export const deleteGalleries = async (uuid) => {
     // eslint-disable-next-line no-useless-catch
     try {
-        const response = await axios.delete(`${API_URL}/${uuid}`, {
-            headers: {
-                'Authorization': `Bearer ${AUTH_TOKEN}`,
-            },
-        });
-
+        const response = await axiosInstance.delete(`${API_URL}/${uuid}`);
         return response.data.data;
     } catch (err) {
         throw err;

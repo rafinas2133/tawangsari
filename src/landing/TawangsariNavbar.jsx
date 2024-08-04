@@ -14,7 +14,7 @@ export const TawangsariNavbar = () => {
 
     return (
         <nav
-            className="absolute w-screen z-50 flex bg-white h-[100px] items-center justify-between px-4 md:px-8 border-b border-gray-200">
+            className="absolute w-screen z-50 flex bg-white h-[80px] items-center justify-between px-4 md:px-8 border-b border-gray-200">
             <div className="flex items-center space-x-4">
                 <img src={LogoBlitar ? LogoBlitar : ''} alt="Kelurahan Tawangsari" className="h-[30px] lg:h-[50px]"/>
                 <h1 className="text-l lg:text-2xl whitespace-nowrap">Kelurahan Tawangsari</h1>
@@ -24,8 +24,8 @@ export const TawangsariNavbar = () => {
                     &#9776; {/* Hamburger icon */}
                 </button>
             </div>
-            <ul className={`lg:flex space-x-4 items-center text-2xl absolute lg:static bg-white w-content right-0 top-[100px] lg:top-0 transition-all duration-300 ease-in-out ${isOpen ? 'block' : 'hidden'} lg:block lg:ml-auto lg:w-auto`}>
-                <li className="border-t lg:border-none">
+            <ul className={`lg:flex space-x-4 items-center text-2xl absolute lg:static bg-white w-content right-0 top-[80px] lg:top-0 transition-all duration-300 ease-in-out ${isOpen ? 'block' : 'hidden'} lg:block lg:ml-auto lg:w-auto`}>
+                <li className="border-t lg:border-none pl-4 pr-4">
                     <NavLink to="/" className={getNavLinkClass}>Beranda</NavLink>
                 </li>
                 <li className="border-t lg:border-none">

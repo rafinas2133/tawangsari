@@ -45,6 +45,11 @@ export const TawangsariFooter = () => {
                     </div>
                 </div>
             </div>
+            <div className="items-center text-center w-full mb-2 mt-2">
+                <h1 className="text-xl font-bold">
+                    Website made by MMD Team 7 FILKOM UB 2024
+                </h1>
+            </div>
         </footer>
     );
 };

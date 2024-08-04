@@ -21,6 +21,7 @@ export const useLogin = () => {
 
       if (data.status === 'success') {
         localStorage.setItem('token', data.data.token);
+        localStorage.setItem('name', data.data.user.name);
         return { success: true, data: data.data };
       } else {
         return { success: false, message: data.message };

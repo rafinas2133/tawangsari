@@ -38,7 +38,7 @@ const CarouselsForm = () => {
       }
     };
 
-    fetchData();
+    fetchData().then();
   }, []);
 
   const handleChange = (e) => {

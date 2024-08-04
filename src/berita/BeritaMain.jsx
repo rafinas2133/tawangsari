@@ -8,6 +8,8 @@ export const BeritaMain = () => {
     const [newsItem, setNewsItem] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
     useEffect(() => {
         const getNews = async () => {
             try {
@@ -27,10 +29,19 @@ export const BeritaMain = () => {
     if (error) return <div>Error loading news: {error}</div>;
     if (!newsItem) return <div>Berita tidak ditemukan</div>;
 
+    const totalPages = Math.ceil(newsItem.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, newsItem.length);
+    const pageData = newsItem.slice(startIndex, endIndex);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
     return (
         <div className="w-full h-max p-12 px-4 md:px-20 bg-white items-center justify-center text-center">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {newsItem.map((item) => (
+                {pageData.map((item) => (
                     <div key={item["uuid"]}
                          className="group relative bg-card border border-gray-200 rounded-lg overflow-hidden shadow-md p-4">
                         <Link to={`/berita/${item["uuid"]}`} className="block">
@@ -58,6 +69,24 @@ export const BeritaMain = () => {
                     </div>
                 ))}
             </div>
+            {totalPages > 1 && (
+                <div className="flex justify-center mt-8">
+                    <nav aria-label="Page navigation">
+                        <ul className="inline-flex space-x-2">
+                            {[...Array(totalPages)].map((_, index) => (
+                                <li key={index}>
+                                    <button
+                                        className={`px-3 py-1 rounded-md ${currentPage === index + 1 ? 'bg-blue-600 text-white' : 'border border-gray-300'}`}
+                                        onClick={() => handlePageChange(index + 1)}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </div>
+            )}
         </div>
     );
 }
