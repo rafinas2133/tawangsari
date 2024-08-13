@@ -63,8 +63,8 @@ export const BeritaDetail = () => {
                 <h1 className='text-3xl font-bold'>BERITA LAINNYA</h1>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {newsItem["recommendations"].map((item) => (<div key={item["uuid"]}
-                                                                 className="group relative bg-card border border-gray-200 rounded-lg overflow-hidden shadow-md p-4">
+                {newsItem["recommendations"].map((item) => (
+                    <div key={item["uuid"]} className="group relative bg-card border border-gray-200 rounded-lg overflow-hidden shadow-md p-4">
                     <Link to={`/berita/${item["uuid"]}`} className="block">
                         <div className='overflow-hidden rounded-lg'>
                             <img
@@ -75,7 +75,7 @@ export const BeritaDetail = () => {
                                 }}/>
                         </div>
                         <div
-                            className="bg-card md:h-80 text-white text-left p-4 rounded-lg flex flex-col justify-between">
+                            className="bg-card md:h-60 text-white text-left p-4 rounded-lg flex flex-col justify-between">
                             <h5 className="text-xl xl:text-lg lg:text-xl font-bold mb-2">{item.title.split(' ').slice(0, 7).join(' ')}...</h5>
                             <p className="text-sm text-yellow-400 mb-4">Oleh {item["uploaded_by"]} | {new Date(item["created_at"]).toLocaleDateString('id-ID', {
                                 day: '2-digit', month: 'long', year: 'numeric'

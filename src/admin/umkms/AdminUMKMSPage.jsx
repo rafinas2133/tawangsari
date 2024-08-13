@@ -15,18 +15,16 @@ export const AdminUmkmsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [categoryFilter, setCategoryFilter] = useState('');
+    const [categoryFilter, setCategoryFilter] = useState('Semua');
     const [currentPage, setCurrentPage] = useState(1);
     const [modalOpen, setModalOpen] = useState(false);
     const [currentUmkmId, setCurrentUmkmId] = useState(null);
     const [currentUmkmData, setCurrentUmkmData] = useState(null);
     const [alert, setAlert] = useState({message: '', type: ''});
     const [confirmOpen, setConfirmOpen] = useState(false);
-    const [confirmAction, setConfirmAction] = useState(() => () => {
-    });
+    const [confirmAction, setConfirmAction] = useState(() => () => {});
     const itemsPerPage = 10;
-    const categories = ['Kuliner', 'Salon & Kecantikan', 'Jasa & Reparasi', 'Lainnya'];
-
+    const categories = ['Semua', 'Kuliner', 'Salon & Kecantikan', 'Jasa & Reparasi', 'Lainnya'];
 
     useEffect(() => {
         const getUmkms = async () => {
@@ -35,7 +33,7 @@ export const AdminUmkmsPage = () => {
                 const data = await fetchUmkmsData();
                 const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 setUmkms(sortedData);
-                setFilteredUmkms(data);
+                setFilteredUmkms(sortedData);
                 setLoading(false);
             } catch (err) {
                 setError(err.message);
@@ -49,9 +47,8 @@ export const AdminUmkmsPage = () => {
     useEffect(() => {
         const filtered = umkms.filter(item =>
             (item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.owner.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.category.toLowerCase().includes(searchTerm.toLowerCase())) &&
-            (categoryFilter === '' || item.category === categoryFilter)
+                item.owner.toLowerCase().includes(searchTerm.toLowerCase())) &&
+            (categoryFilter === 'Semua' || item.category === categoryFilter)
         );
         setFilteredUmkms(filtered);
         setCurrentPage(1);
@@ -143,7 +140,6 @@ export const AdminUmkmsPage = () => {
                             onChange={(e) => setCategoryFilter(e.target.value)}
                             className="p-2 border border-gray-300 rounded-r-md w-fit"
                         >
-                            <option value="">Category</option>
                             {categories.map((category) => (
                                 <option key={category} value={category}>
                                     {category}

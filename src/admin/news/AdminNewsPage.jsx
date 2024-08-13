@@ -1,13 +1,13 @@
 // eslint-disable-next-line no-unused-vars
-import React, {useEffect, useState} from 'react';
-import {Navbar} from '../components/Navbar';
-import {deleteNews, fetchNewsData} from '../../api/newsAPI';
-import {Modal} from '../components/Modal';
-import {NewsForm} from '../components/NewsForm';
-import {Alert} from '../components/Alert';
-import {ConfirmationModal} from "../components/ConfirmationModal.jsx";
-import {Footer} from "../components/Footer.jsx";
-import { Loading } from "../components/Loading";
+import React, { useEffect, useState } from 'react';
+import { Navbar } from '../components/Navbar';
+import { deleteNews, fetchNewsData } from '../../api/newsAPI';
+import { Modal } from '../components/Modal';
+import { NewsForm } from '../components/NewsForm';
+import { Alert } from '../components/Alert';
+import { ConfirmationModal } from '../components/ConfirmationModal.jsx';
+import { Footer } from '../components/Footer.jsx';
+import { Loading } from '../components/Loading';
 
 export const AdminNewsPage = () => {
     const [news, setNews] = useState([]);
@@ -15,15 +15,16 @@ export const AdminNewsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [categoryFilter, setCategoryFilter] = useState('Semua');
     const [currentPage, setCurrentPage] = useState(1);
     const [modalOpen, setModalOpen] = useState(false);
     const [currentNewsId, setCurrentNewsId] = useState(null);
     const [currentNewsData, setCurrentNewsData] = useState(null);
-    const [alert, setAlert] = useState({message: '', type: ''});
+    const [alert, setAlert] = useState({ message: '', type: '' });
     const [confirmOpen, setConfirmOpen] = useState(false);
-    const [confirmAction, setConfirmAction] = useState(() => () => {
-    });
+    const [confirmAction, setConfirmAction] = useState(() => () => {});
     const itemsPerPage = 10;
+    const categories = ['Semua', 'Kegiatan', 'Kependudukan', 'Perpajakan', 'Umum', 'Lainnya'];
 
     useEffect(() => {
         const getNews = async () => {
@@ -32,7 +33,7 @@ export const AdminNewsPage = () => {
                 const data = await fetchNewsData();
                 const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 setNews(sortedData);
-                setFilteredNews(data);
+                setFilteredNews(sortedData);
                 setLoading(false);
             } catch (err) {
                 setError(err.message);
@@ -40,17 +41,20 @@ export const AdminNewsPage = () => {
             }
         };
 
-        getNews().then();
+        getNews();
     }, []);
 
     useEffect(() => {
-        const filtered = news.filter(item => item.title.toLowerCase().includes(searchTerm.toLowerCase()));
+        const filtered = news.filter(item =>
+            item.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            (categoryFilter === 'Semua' || item.category === categoryFilter)
+        );
         setFilteredNews(filtered);
         setCurrentPage(1);
-    }, [searchTerm, news]);
+    }, [searchTerm, categoryFilter, news]);
 
     const handleEdit = (id) => {
-        const newsItem = news.find(item => item["uuid"] === id);
+        const newsItem = news.find(item => item['uuid'] === id);
         setCurrentNewsId(id);
         setCurrentNewsData(newsItem);
         setModalOpen(true);
@@ -68,7 +72,7 @@ export const AdminNewsPage = () => {
 
     const handleSuccess = () => {
         setModalOpen(false);
-        setAlert({message: 'Operation successful', type: 'success'});
+        setAlert({ message: 'Operation successful', type: 'success' });
         const getNews = async () => {
             try {
                 setLoading(true);
@@ -83,7 +87,7 @@ export const AdminNewsPage = () => {
             }
         };
 
-        getNews().then();
+        getNews();
     };
 
     const handleDelete = (id) => {
@@ -100,7 +104,7 @@ export const AdminNewsPage = () => {
         setConfirmOpen(true);
     };
 
-    if (loading) return <Loading/>;
+    if (loading) return <Loading />;
 
     const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -110,67 +114,105 @@ export const AdminNewsPage = () => {
         setCurrentPage(page);
     };
 
-    return (<>
-        <Navbar/>
-        <div className="p-4">
-            {error && <Alert message={error} type="error" onClose={() => setError(null)}/>}
-            {alert.message && <Alert message={alert.message} type={alert.type}
-                                     onClose={() => setAlert({message: '', type: ''})}/>}
-            <div className="flex w-full justify-between items-center">
-                <h1 className="text-2xl font-bold mb-4">News</h1>
-                <button onClick={handleAdd} className="mb-4 bg-blue-500 text-white px-4 py-2 rounded">Add News
-                </button>
+    return (
+        <>
+            <Navbar />
+            <div className="p-4">
+                {error && <Alert message={error} type="error" onClose={() => setError(null)} />}
+                {alert.message && (
+                    <Alert message={alert.message} type={alert.type} onClose={() => setAlert({ message: '', type: '' })} />
+                )}
+                <div className="flex w-full justify-between items-center">
+                    <h1 className="text-2xl font-bold mb-4">News</h1>
+                    <button onClick={handleAdd} className="mb-4 bg-blue-500 text-white px-4 py-2 rounded">
+                        Add News
+                    </button>
+                </div>
+                <div className="flex">
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="mb-4 p-2 border border-gray-300 rounded-l-md w-full"
+                    />
+                    <div>
+                        <select
+                            value={categoryFilter}
+                            onChange={(e) => setCategoryFilter(e.target.value)}
+                            className="p-2 border border-gray-300 rounded-r-md w-fit"
+                        >
+                            {categories.map((category) => (
+                                <option key={category} value={category}>
+                                    {category}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+                <table className="w-full bg-white border border-gray-300 rounded-md">
+                    <thead>
+                        <tr>
+                            <th className="p-2 border border-gray-300">Title</th>
+                            <th className="p-2 border border-gray-300">Category</th>
+                            <th className="p-2 border border-gray-300">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {currentNews.map((item) => (
+                            <tr key={item['uuid']}>
+                                <td className="p-2 border border-gray-300">{item.title}</td>
+                                <td className="p-2 border border-gray-300">{item.category}</td>
+                                <td className="p-2 border border-gray-300">
+                                    <div className="flex">
+                                        <button
+                                            onClick={() => handleEdit(item['uuid'])}
+                                            className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(item['uuid'])}
+                                            className="bg-red-500 text-white px-2 py-1 rounded"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <div className="mt-4 flex justify-center">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => handlePageChange(index + 1)}
+                            className={`px-3 py-1 mx-1 rounded ${
+                                currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                            }`}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
+                <Modal isOpen={modalOpen} onClose={handleModalClose}>
+                    <NewsForm
+                        id={currentNewsId}
+                        existingData={currentNewsData}
+                        categories={categories} // Pass categories to NewsForm
+                        onClose={handleModalClose}
+                        onSuccess={handleSuccess}
+                    />
+                </Modal>
+                <ConfirmationModal
+                    isOpen={confirmOpen}
+                    onClose={() => setConfirmOpen(false)}
+                    onConfirm={confirmAction}
+                    message="Are you sure you want to delete this item?"
+                />
             </div>
-            <input
-                type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="mb-4 p-2 border border-gray-300 rounded-md w-full"
-            />
-            <table className="w-full bg-white border border-gray-300 rounded-md">
-                <thead>
-                <tr>
-                    <th className="p-2 border border-gray-300">Title</th>
-                    <th className="p-2 border border-gray-300">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {currentNews.map((item) => (<tr key={item["uuid"]}>
-                    <td className="p-2 border border-gray-300">{item.title}</td>
-                    <td className="p-2 border border-gray-300">
-                        <div className="flex">
-                            <button onClick={() => handleEdit(item["uuid"])}
-                                    className="bg-blue-500 text-white px-2 py-1 rounded mr-2">Edit
-                            </button>
-                            <button onClick={() => handleDelete(item["uuid"])}
-                                    className="bg-red-500 text-white px-2 py-1 rounded">Delete
-                            </button>
-                        </div>
-                    </td>
-                </tr>))}
-                </tbody>
-            </table>
-            <div className="mt-4 flex justify-center">
-                {Array.from({length: totalPages}, (_, index) => (<button
-                    key={index}
-                    onClick={() => handlePageChange(index + 1)}
-                    className={`px-3 py-1 mx-1 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-                >
-                    {index + 1}
-                </button>))}
-            </div>
-            <Modal isOpen={modalOpen} onClose={handleModalClose}>
-                <NewsForm id={currentNewsId} existingData={currentNewsData} onClose={handleModalClose}
-                          onSuccess={handleSuccess}/>
-            </Modal>
-            <ConfirmationModal
-                isOpen={confirmOpen}
-                onClose={() => setConfirmOpen(false)}
-                onConfirm={confirmAction}
-                message="Are you sure you want to delete this item?"
-            />
-        </div>
-        <Footer/>
-    </>);
+            <Footer />
+        </>
+    );
 };

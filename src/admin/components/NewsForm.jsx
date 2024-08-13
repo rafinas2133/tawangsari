@@ -10,15 +10,19 @@ export const NewsForm = ({ id, existingData, onSuccess, onClose }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [image, setImage] = useState(null);
+    const [category, setCategory] = useState('');
     const [previewImage, setPreviewImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const categories = ['Kegiatan', 'Kependudukan', 'Perpajakan', 'Umum', 'Lainnya'];
 
     useEffect(() => {
         if (existingData) {
             // eslint-disable-next-line react/prop-types
             setTitle(existingData["title"]);
+            // eslint-disable-next-line react/prop-types
+            setCategory(existingData.category);
             // eslint-disable-next-line react/prop-types
             setContent(existingData["content"]);
             // eslint-disable-next-line react/prop-types
@@ -41,6 +45,7 @@ export const NewsForm = ({ id, existingData, onSuccess, onClose }) => {
         try {
             const formData = new FormData();
             formData.append('title', title);
+            formData.append('category', category);
             formData.append('content', content);
             if (image) {
                 formData.append('image', image);
@@ -72,6 +77,21 @@ export const NewsForm = ({ id, existingData, onSuccess, onClose }) => {
                     onChange={(e) => setTitle(e.target.value)}
                     className="p-2 border border-gray-300 rounded-md w-full"
                 />
+            </div>
+            <div>
+                <label className="block mb-2">Category</label>
+                <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="p-2 border border-gray-300 rounded-md w-full"
+                >
+                    <option value="Lainnya">Select Category</option>
+                    {categories.map((cat) => (
+                        <option key={cat} value={cat}>
+                            {cat}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div>
                 <label className="block mb-2">Image</label>
