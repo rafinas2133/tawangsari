@@ -10,7 +10,7 @@ export const TawangsariPeta = () => {
                 <div className='flex flex-col items-center md:w-1/3'>
                     <img src={pinpoint ? pinpoint : ''} alt="pinpoint" className='h-14 mb-4'/>
                     <p className="text-center font-semibold text-xl md:text-3xl px-6 md:px-0">
-                        Jl. Penataran Tawangsari Kec. Garum No.20, Tawangbrale, Tawangsari, Kec. Garum, Kabupaten
+                        Jl. Penataran Tawangsari Kec. Garum No.20, Ngebrak, Tawangsari, Kec. Garum, Kabupaten
                         Blitar, Jawa Timur 66182
                     </p>
                 </div>
