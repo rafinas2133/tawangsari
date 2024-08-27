@@ -19,15 +19,15 @@ export const ProfileData = () => {
               </tr>
               <tr>
                 <td className="border border-gray-300 px-4 py-2">Timur</td>
-                <td className="border border-gray-300 px-4 py-2">Desa Slorok dan Kelurahan Bence</td>
+                <td className="border border-gray-300 px-4 py-2">Desa Slorok, Kelurahan Garum dan Kelurahan Bence</td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-4 py-2">Selatan</td>
-                <td className="border border-gray-300 px-4 py-2">Kelurahan Sumberdiren, Garum, dan Bence</td>
+                <td className="border border-gray-300 px-4 py-2">Kelurahan Garum</td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-4 py-2">Barat</td>
-                <td className="border border-gray-300 px-4 py-2">Kecamatan Nglegok dan Desa Pojok</td>
+                <td className="border border-gray-300 px-4 py-2">Kelurahan Sumberdiren, Desa Pojok dan Desa Jiwut </td>
               </tr>
             </tbody>
           </table>
@@ -70,7 +70,7 @@ export const ProfileData = () => {
                 </tr>
                 <tr>
                   <td className="border px-4 py-2">Luas</td>
-                  <td className="border px-4 py-2">4,56 Ha</td>
+                  <td className="border px-4 py-2">456 Ha</td>
                 </tr>
                 <tr>
                   <td className="border px-4 py-2">Jumlah penduduk</td>

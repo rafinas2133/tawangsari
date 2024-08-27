@@ -94,17 +94,21 @@ export const ProfileMain = () => {
                 <div className="mb-8">
                     <h2 className="text-2xl font-semibold mb-2">Wilayah</h2>
                     <p className='text-justify'>
-                        Kelurahan Tawangsari di Kecamatan Garum, Kabupaten Blitar, terdiri dari empat wilayah
-                        utama yang memiliki karakteristik masing-masing. Wilayah Tawangsari terletak di
-                        pusat kelurahan, dengan permukiman padat penduduk dan sebagian besar wilayahnya
-                        datar dengan sedikit bukit. Di sebelah timur Tawangsari, terdapat wilayah Ngebrak
-                        yang memiliki lahan pertanian cukup luas dan wilayahnya lebih berbukit dibandingkan
-                        dengan Tawangsari. Di sebelah barat Tawangsari, terdapat wilayah Tawangrejo yang juga
-                        memiliki lahan pertanian dan kebun dengan kontur wilayah agak berbukit serta beberapa dataran.
-                        Terakhir, wilayah Tawangbrak yang terletak di sebelah selatan Tawangsari memiliki
-                        campuran antara lahan permukiman dan pertanian, dengan kontur wilayah yang cenderung datar
-                        namun memiliki beberapa area berbukit. Setiap wilayah ini memberikan kontribusi beragam terhadap
-                        potensi ekonomi dan kehidupan sosial Kelurahan Tawangsari.
+                        Kelurahan Tawangsari di Kecamatan Garum, Kabupaten Blitar, 
+                        terdiri dari empat wilayah utama yang memiliki karakteristik 
+                        masing-masing. Wilayah Ngebrak terletak di pusat Kelurahan 
+                        Tawangsari. Ngebrak adalah daerah dengan pemukiman 
+                        padat penduduk, sebagian besar wilayahnya datar tanpa bukit, 
+                        dan terletak paling selatan Tawangsari. Ke utara dari Ngebrak, 
+                        terdapat wilayah Tawangbrak yang memiliki lahan pertanian yang 
+                        cukup luas, wilayahnya datar, tidak berbukit, namun berada pada 
+                        ketinggian yang lebih tinggi dibandingkan dengan Ngebrak. Di 
+                        sebelah timur Tawangsari, terdapat wilayah Tawangrejo yang juga 
+                        memiliki lahan pertanian dan kebun, dengan kontur wilayah yang 
+                        tidak berbukit. Terakhir, di utara Tawangbrak terdapat wilayah 
+                        Tawangsari yang tidak berbukit. Setiap wilayah ini memberikan 
+                        kontribusi beragam terhadap potensi ekonomi dan kehidupan 
+                        sosial Kelurahan Tawangsari.
                     </p>
                     <ProfileData/>
                 </div>
